@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Powertek — Class I Electrical Contractors, Consultants &amp; Engineers</title>
+<meta name="description" content="Powertek is a Class I Licensed Electrical Contractor in Bengaluru, established 1995. HT &amp; LT electrical infrastructure, apartment and layout electrification, hospital and commercial projects, BESCOM liaison, testing and commissioning." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@500,700,900&amp;display=swap" rel="stylesheet" />
+<style>
+/* Powertek brand palette — extracted from assets/powertek-mark.png.
+   Inline styles across the template use these literal values; this block is the
+   single reference for what each token means. Hierarchy: white, then charcoal,
+   then red-orange as primary accent, yellow as secondary accent. */
+:root{
+  --pt-white:#FFFFFF;
+  --pt-dark:#141414;
+  --pt-red:#D74627;        /* primary accent — CTAs, active states, pulses */
+  --pt-red-deep:#B3381D;   /* small-text accent, button gradient base */
+  --pt-red-darkest:#9C2F17;
+  --pt-red-bright:#E05430; /* button gradient top */
+  --pt-yellow:#EDAE21;     /* secondary accent — hover, energy, details */
+  --pt-yellow-deep:#C98F14;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:112px;-webkit-font-smoothing:antialiased}
+/* Navbar brand lockup — inline styles carry the desktop sizing (clamp-based);
+   these rules only handle the narrow breakpoints where the lockup would start
+   crowding the nav links. !important is required to beat the inline style. */
+@media (max-width:900px){
+  .pt-nav{gap:22px!important}
+  .pt-brand-sub{display:none!important}
+}
+@media (max-width:640px){
+  .pt-brand-name{font-size:17px!important;letter-spacing:.12em!important}
+  .pt-brand-mark{height:32px!important}
+}
+body{margin:0;background:#FFFFFF;color:#2C2A27;font-family:Inter,system-ui,sans-serif}
+a{color:#B3381D;text-decoration:none;transition:color .3s}
+a:hover{color:#9C2F17}
+input,textarea,button{font-family:inherit}
+::selection{background:rgba(215,70,39,.16);color:#0B0B0B}
+@keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes riseSm{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes blurIn{from{opacity:0;filter:blur(14px);transform:translateY(26px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes widen{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes drawIn{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+@keyframes travel{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+@keyframes flow{to{stroke-dashoffset:-32}}
+@keyframes glowPulse{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes floatY{from{transform:translateY(-3.5%)}to{transform:translateY(3.5%)}}
+@keyframes kenburns{from{transform:scale(1.04) translateY(-1.5%)}to{transform:scale(1.13) translateY(1.5%)}}
+@keyframes loaderOut{to{opacity:0;visibility:hidden}}
+@keyframes loaderBar{0%{transform:translateX(-100%)}100%{transform:translateX(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes markIn{from{opacity:0;transform:scale(.6) rotate(-24deg)}to{opacity:1;transform:none}}
+@keyframes sheen{0%{transform:translateX(-120%)}60%,100%{transform:translateX(220%)}}
+@keyframes dotRun{0%{offset-distance:0%}100%{offset-distance:100%}}
+
+/* ===========================================================================
+   PROJECTS SECTION + PROJECT DOSSIER MODAL
+   Scoped entirely to .pt-* classes so no other section is affected. Uses real
+   classes rather than the inline `style-hover` attribute because the card hover
+   drives descendants (image, accent, title, cue), which a single-element
+   pseudo-class rule cannot express.
+   Easing is cubic-bezier(.22,1,.36,1) throughout for the cinematic feel.
+=========================================================================== */
+@keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes slideInX{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes cardSpark{0%{transform:translateX(-120%)}100%{transform:translateX(460%)}}
+@keyframes ptBackdropIn{from{opacity:0}to{opacity:1}}
+@keyframes ptModalIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes ptRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes ptScopeIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+
+/* ---- grid: 3 desktop / 2 tablet / 1 mobile, all rows equal height ---- */
+.pt-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:clamp(20px,2.3vw,34px);margin-top:clamp(52px,5vw,78px)}
+@media (max-width:1080px){.pt-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:680px){.pt-grid{grid-template-columns:1fr}}
+.pt-card-wrap{display:flex}
+
+/* ---- card ---- */
+.pt-card{position:relative;display:flex;flex-direction:column;width:100%;text-align:left;cursor:pointer;background:#FFFFFF;border:1px solid rgba(20,18,16,.11);border-radius:20px;overflow:hidden;box-shadow:0 1px 2px rgba(28,20,14,.04),0 18px 44px -30px rgba(28,20,14,.22);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1),border-color .6s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover,.pt-card:focus-visible{transform:scale(1.025);box-shadow:0 2px 5px rgba(28,20,14,.05),0 34px 64px -30px rgba(28,20,14,.32);border-color:rgba(215,70,39,.34)}
+.pt-card:focus-visible{outline:2px solid #D74627;outline-offset:3px}
+.pt-card-media{position:relative;aspect-ratio:16/10;overflow:hidden;background:#F5F2EF;border-bottom:1px solid rgba(20,18,16,.08)}
+.pt-card-media-inner{position:absolute;inset:0;transition:transform .65s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-media-inner,.pt-card:focus-visible .pt-card-media-inner{transform:scale(1.05) translate(-1.1%,-.9%)}
+.pt-card-img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* hover cue — a prompt only; details live behind the click */
+.pt-card-cue{position:absolute;right:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:100px;background:rgba(255,255,255,.94);border:1px solid rgba(215,70,39,.28);color:#B3381D;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;opacity:0;transform:translateY(9px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-cue,.pt-card:focus-visible .pt-card-cue{opacity:1;transform:none}
+
+/* accent line wipes in red-orange, then a yellow charge runs along it */
+.pt-card-accent{position:absolute;left:0;right:0;bottom:0;height:2px;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,#D74627,#D74627 45%,#EDAE21);transition:transform .65s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-accent,.pt-card:focus-visible .pt-card-accent{transform:scaleX(1)}
+.pt-card-spark{position:absolute;left:0;bottom:0;height:2px;width:22%;opacity:0;background:linear-gradient(90deg,transparent,#EDAE21,transparent)}
+.pt-card:hover .pt-card-spark{opacity:1;animation:cardSpark 1.6s cubic-bezier(.4,0,.2,1) .2s}
+.pt-card:hover .pt-ph-pulse{animation:travel 3.2s linear infinite}
+
+/* ---- card body: date pinned to the baseline so every card aligns ---- */
+.pt-card-body{display:flex;flex-direction:column;flex:1;padding:clamp(20px,1.7vw,26px)}
+.pt-card-head{display:flex;align-items:center;gap:12px}
+.pt-card-num{font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;transition:color .6s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-num{color:#C98F14}
+.pt-card-rule{flex:1;height:1px;background:rgba(20,18,16,.12);transition:background .6s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-rule{background:linear-gradient(90deg,rgba(215,70,39,.5),rgba(237,174,33,.35))}
+.pt-card-title{margin:16px 0 0;font:700 clamp(19px,1.5vw,23px)/1.22 Satoshi,Inter,sans-serif;letter-spacing:-.025em;color:#141414;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.pt-card:hover .pt-card-title,.pt-card:focus-visible .pt-card-title{transform:translateX(4px)}
+.pt-card-type{margin-top:10px;font:400 14px/1.55 Inter,sans-serif;color:#5C554E}
+.pt-card-date{margin-top:auto;padding-top:20px;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#625B53}
+
+/* ---- engineered placeholder (drops out the moment a real image exists) ---- */
+.pt-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#FAF8F6,#F2EFEB 55%,#F7F5F3),repeating-linear-gradient(0deg,rgba(20,18,16,.05) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(20,18,16,.05) 0 1px,transparent 1px 28px)}
+.pt-ph-art{position:absolute;inset:0;width:100%;height:100%;opacity:.85}
+.pt-ph-label{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;padding:10px 16px;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F}
+.pt-ph-sub{font-size:8px;letter-spacing:.2em;color:#8A8177}
+
+/* =================== modal =================== */
+.pt-modal-root{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px)}
+.pt-modal-backdrop{position:absolute;inset:0;background:rgba(20,20,20,.65);animation:ptBackdropIn .45s cubic-bezier(.22,1,.36,1) both}
+@supports (backdrop-filter:blur(4px)){.pt-modal-backdrop{backdrop-filter:blur(6px)}}
+.pt-modal{position:relative;width:min(1120px,92vw);max-height:90vh;display:flex;flex-direction:column;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);border-radius:24px;overflow:hidden;box-shadow:0 40px 120px -40px rgba(20,16,12,.55);animation:ptModalIn .6s cubic-bezier(.22,1,.36,1) both}
+.pt-modal:focus{outline:none}
+.pt-modal-scroll{overflow-y:auto;overscroll-behavior:contain;padding:clamp(26px,3.4vw,54px);background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.028) 0 1px,transparent 1px 34px),repeating-linear-gradient(90deg,rgba(20,18,16,.028) 0 1px,transparent 1px 34px)}
+.pt-modal-x{position:absolute;top:14px;right:14px;z-index:3;width:42px;height:42px;display:grid;place-items:center;border-radius:50%;cursor:pointer;background:#FFFFFF;border:1px solid rgba(20,18,16,.16);color:#141414;font:400 22px/1 Inter,sans-serif;transition:background .35s,color .35s,border-color .35s,transform .35s cubic-bezier(.22,1,.36,1)}
+.pt-modal-x:hover{background:#D74627;border-color:#D74627;color:#FFFFFF;transform:rotate(90deg)}
+.pt-modal-x:focus-visible{outline:2px solid #D74627;outline-offset:3px}
+
+.pt-modal-head{animation:ptRise .55s cubic-bezier(.22,1,.36,1) .05s both;padding-right:56px}
+.pt-modal-eyebrow{font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;animation:ptRise .5s cubic-bezier(.22,1,.36,1) both}
+.pt-modal-title{margin:20px 0 0;font:900 clamp(28px,3.4vw,50px)/1.04 Satoshi,Inter,sans-serif;letter-spacing:-.038em;color:#141414;animation:ptRise .55s cubic-bezier(.22,1,.36,1) .1s both}
+.pt-modal-sub{margin-top:14px;font:400 clamp(15px,1.2vw,18px)/1.6 Inter,sans-serif;color:#5C554E;animation:ptRise .55s cubic-bezier(.22,1,.36,1) .16s both}
+.pt-modal-scale{margin-top:8px;font:500 14px/1.6 Inter,sans-serif;color:#3E3A36;animation:ptRise .55s cubic-bezier(.22,1,.36,1) .2s both}
+.pt-modal-completed{display:inline-flex;align-items:baseline;gap:14px;margin-top:24px;padding:12px 20px;border-radius:100px;background:#FDF3EF;border:1px solid rgba(215,70,39,.22);animation:ptRise .55s cubic-bezier(.22,1,.36,1) .24s both}
+.pt-modal-completed-k{font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D}
+.pt-modal-completed-v{font:500 14px/1 Inter,sans-serif;color:#141414}
+
+.pt-modal-gallery{display:grid;gap:14px;margin-top:clamp(28px,3vw,44px);animation:ptRise .6s cubic-bezier(.22,1,.36,1) .3s both}
+.pt-modal-fig{position:relative;margin:0;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(20,18,16,.12);background:#F5F2EF}
+.pt-modal-fig img{width:100%;height:100%;object-fit:cover;display:block}
+.pt-modal-fig-ph .pt-ph-pulse{animation:travel 4.2s linear infinite}
+.pt-modal-gallery:has(.pt-modal-fig:nth-child(2)){grid-template-columns:repeat(2,1fr)}
+.pt-modal-gallery:has(.pt-modal-fig:nth-child(2)) .pt-modal-fig:first-child{grid-column:1/-1}
+
+.pt-modal-block{margin-top:clamp(34px,3.6vw,56px);padding-top:clamp(26px,2.6vw,38px);border-top:1px solid rgba(20,18,16,.12)}
+.pt-modal-b1{animation:ptRise .55s cubic-bezier(.22,1,.36,1) .36s both}
+.pt-modal-b2{animation:ptRise .55s cubic-bezier(.22,1,.36,1) .42s both}
+.pt-modal-b3{animation:ptRise .55s cubic-bezier(.22,1,.36,1) .48s both}
+.pt-modal-label{font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.28em;color:#5F584F}
+.pt-modal-body{margin:18px 0 0;max-width:76ch;font:400 clamp(15px,1.15vw,17px)/1.78 Inter,sans-serif;color:#3E3A36}
+
+.pt-scope{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:0}
+.pt-scope-item{display:flex;align-items:baseline;gap:18px;padding:15px 0;border-bottom:1px solid rgba(20,18,16,.08);animation:ptScopeIn .5s cubic-bezier(.22,1,.36,1) both}
+.pt-scope-item:last-child{border-bottom:none}
+.pt-scope-n{flex:none;width:26px;font:500 10px/1.6 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#B3381D}
+.pt-scope-rule{flex:none;width:26px;height:1px;background:linear-gradient(90deg,#D74627,rgba(237,174,33,.5));transform:translateY(-4px)}
+.pt-scope-t{font:400 clamp(14px,1.05vw,16px)/1.6 Inter,sans-serif;color:#3E3A36}
+
+.pt-tech{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;margin-top:22px;background:rgba(20,18,16,.1);border:1px solid rgba(20,18,16,.1);border-radius:14px;overflow:hidden}
+.pt-tech-cell{background:#FFFFFF;padding:22px 20px}
+.pt-tech-k{font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#8A8177}
+.pt-tech-v{margin-top:12px;font:500 clamp(15px,1.2vw,18px)/1.4 Inter,sans-serif;color:#141414}
+
+.pt-modal-nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-top:clamp(34px,3.6vw,54px);padding-top:26px;border-top:1px solid rgba(20,18,16,.12);animation:ptRise .55s cubic-bezier(.22,1,.36,1) .54s both}
+.pt-nav-btn{display:inline-flex;align-items:center;gap:14px;max-width:46%;padding:14px 20px;border-radius:14px;cursor:pointer;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#141414;font:inherit;text-align:left;transition:background .4s,border-color .4s,transform .45s cubic-bezier(.22,1,.36,1)}
+.pt-nav-btn:hover{background:#FDF3EF;border-color:rgba(215,70,39,.45);transform:translateX(-4px)}
+.pt-nav-btn-next:hover{transform:translateX(4px)}
+.pt-nav-btn:focus-visible{outline:2px solid #D74627;outline-offset:3px}
+.pt-nav-btn-t{display:flex;flex-direction:column;gap:7px;min-width:0}
+.pt-nav-btn-k{font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D}
+.pt-nav-btn-v{font:500 13px/1.3 Inter,sans-serif;color:#141414;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-nav-btn-off{opacity:.34;cursor:default;pointer-events:none}
+.pt-nav-btn-off .pt-nav-btn-k{color:#8A8177}
+.pt-modal-close-btn{padding:15px 26px;border-radius:100px;cursor:pointer;background:#D74627;border:none;color:#FFFFFF;font:600 12px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;transition:background .35s,color .35s}
+.pt-modal-close-btn:hover{background:#EDAE21;color:#141414}
+.pt-modal-close-btn:focus-visible{outline:2px solid #141414;outline-offset:3px}
+
+@media (max-width:760px){
+  .pt-modal{width:100%;max-height:94vh;border-radius:18px}
+  .pt-modal-nav{flex-direction:column;align-items:stretch}
+  .pt-nav-btn{max-width:none;justify-content:flex-start}
+  .pt-nav-btn-next{justify-content:space-between}
+  .pt-modal-close-btn{order:3;width:100%}
+  .pt-scope-item{gap:12px}
+  .pt-scope-rule{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .pt-card,.pt-card-media-inner,.pt-card-title,.pt-card-accent,.pt-card-cue{transition-duration:.01ms!important}
+  .pt-card:hover,.pt-card:focus-visible{transform:none}
+  .pt-card:hover .pt-card-media-inner,.pt-card:focus-visible .pt-card-media-inner{transform:none}
+  .pt-card:hover .pt-card-spark,.pt-card:hover .pt-ph-pulse,.pt-modal-fig-ph .pt-ph-pulse{animation:none}
+  .pt-card-wrap,.pt-modal,.pt-modal-backdrop,.pt-modal-head,.pt-modal-eyebrow,.pt-modal-title,.pt-modal-sub,.pt-modal-scale,.pt-modal-completed,.pt-modal-gallery,.pt-modal-b1,.pt-modal-b2,.pt-modal-b3,.pt-scope-item,.pt-modal-nav,.pt-daterange{animation-duration:.01ms!important;animation-delay:0ms!important}
+}
+</style>
+</helmet>
+
+<div style="position:relative;background:#FFFFFF;overflow-x:clip;">
+
+<div style="position:fixed;top:0;left:0;right:0;height:2px;z-index:80;background:rgba(20,18,16,.08);">
+  <div style="height:100%;width:100%;transform-origin:0 50%;background:linear-gradient(90deg,#9C2F17,#D74627 60%,#EDAE21);box-shadow:0 0 10px rgba(215,70,39,.35);animation:sx linear both;animation-timeline:scroll(root);"></div>
+</div>
+
+<sc-if value="{{ loader }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;inset:0;z-index:120;background:#FFFFFF;display:grid;place-items:center;animation:loaderOut .8s cubic-bezier(.4,0,.2,1) 1.7s forwards;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:26px;">
+    <img src="assets/powertek-mark.png" alt="Powertek" style="width:64px;height:auto;animation:markIn .9s cubic-bezier(.2,.9,.2,1) both;" />
+    <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.42em;color:#5F584F;">ENERGISING</div>
+    <div style="width:180px;height:1px;background:rgba(20,18,16,.16);overflow:hidden;">
+      <div style="width:100%;height:100%;background:linear-gradient(90deg,transparent,#D74627);animation:loaderBar 1.5s cubic-bezier(.5,0,.2,1) .15s both;"></div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<header style="position:fixed;top:2px;left:0;right:0;z-index:70;background:rgba(255,255,255,.8);backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid rgba(20,18,16,.09);">
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;height:clamp(76px,7vw,92px);display:flex;align-items:center;justify-content:space-between;gap:32px;">
+    <a href="#home" style="display:flex;align-items:center;gap:16px;color:#141414;min-width:0;">
+      <img class="pt-brand-mark" src="assets/powertek-mark.png" alt="Powertek logo" style="height:clamp(38px,4.6vw,50px);width:auto;display:block;flex:none;" />
+      <span style="display:flex;flex-direction:column;line-height:1;min-width:0;">
+        <span class="pt-brand-name" style="font:900 clamp(19px,2vw,23px)/1 Satoshi,Inter,sans-serif;letter-spacing:.15em;">POWERTEK</span>
+        <span class="pt-brand-sub" style="font:400 clamp(9px,.85vw,10.5px)/1 'IBM Plex Mono',monospace;letter-spacing:.17em;color:#5A534C;margin-top:7px;white-space:nowrap;">CLASS I ELECTRICAL CONTRACTORS</span>
+      </span>
+    </a>
+    <nav class="pt-nav" style="display:flex;align-items:center;gap:34px;">
+      <a href="#about" style="font:500 13px/1 Inter,sans-serif;letter-spacing:.01em;color:#57504A;transition:color .3s;" style-hover="color:#D74627">About</a>
+      <a href="#why" style="font:500 13px/1 Inter,sans-serif;letter-spacing:.01em;color:#57504A;transition:color .3s;" style-hover="color:#D74627">Why Powertek</a>
+      <a href="#services" style="font:500 13px/1 Inter,sans-serif;letter-spacing:.01em;color:#57504A;transition:color .3s;" style-hover="color:#D74627">Services</a>
+      <a href="#projects" style="font:500 13px/1 Inter,sans-serif;letter-spacing:.01em;color:#57504A;transition:color .3s;" style-hover="color:#D74627">Projects</a>
+      <a href="#contact" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="font:600 13px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;padding:13px 24px;border-radius:100px;transition:background .35s,color .35s,box-shadow .4s,transform .25s cubic-bezier(.2,.9,.2,1);box-shadow:0 8px 22px -10px rgba(215,70,39,.45);" style-hover="background:#EDAE21;color:#141414;box-shadow:0 12px 30px -10px rgba(237,174,33,.55)">Enquire</a>
+    </nav>
+  </div>
+</header>
+
+<section id="home" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:150px 0 0;isolation:isolate;">
+  <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block;"></canvas>
+  <div style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 80% at 18% 8%,rgba(215,70,39,.1),transparent 60%),radial-gradient(90% 70% at 88% 24%,rgba(215,70,39,.06),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.08) 42%,#FFFFFF 96%);"></div>
+
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;width:100%;">
+    <div style="display:flex;align-items:center;gap:16px;animation:riseSm .8s cubic-bezier(.2,.9,.2,1) .15s both;">
+      <span style="width:34px;height:1px;background:linear-gradient(90deg,transparent,#D74627);"></span>
+      <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">BENGALURU · EST. 1995 · CLASS I LICENSED</span>
+    </div>
+    <h1 style="margin:30px 0 0;max-width:16ch;font:900 clamp(46px,7.2vw,124px)/0.94 Satoshi,Inter,sans-serif;letter-spacing:-.045em;color:#141414;text-wrap:balance;">
+      <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .3s both;">Powering</span>
+      <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .44s both;">Infrastructure</span>
+      <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .58s both;background:linear-gradient(94deg,#EA6A34,#D74627 55%,#9C2F17);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Since 1995</span>
+    </h1>
+    <p style="margin:34px 0 0;max-width:56ch;font:400 clamp(15px,1.25vw,19px)/1.7 Inter,sans-serif;color:#5C554E;animation:riseSm .9s cubic-bezier(.2,.9,.2,1) .8s both;">Class I Licensed Electrical Contractors delivering HT &amp; LT electrical infrastructure across Bengaluru for over three decades.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:44px;animation:riseSm .9s cubic-bezier(.2,.9,.2,1) .95s both;">
+      <a href="#projects" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:12px;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;padding:19px 32px;border-radius:100px;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
+        Explore Projects
+        <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+      </a>
+      <a href="#contact" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:12px;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;padding:19px 32px;border-radius:100px;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
+        Contact Us
+        <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
+      </a>
+    </div>
+  </div>
+
+  <div style="margin-top:clamp(48px,7vh,96px);width:100%;overflow:hidden;">
+    <!-- The container height must stay tied to the SVG's own aspect ratio. It was
+         previously driven by 26vh while the width was driven by 100% of the viewport,
+         so the container's ratio drifted away from the viewBox's; under `slice` that
+         mismatch is resolved by cropping, and `yMax` pinned the whole crop to the top
+         (at 1920x1080 that removed everything above y=67 — pole tops, the top wire and
+         the 11 kV span). Intrinsic sizing keeps the two ratios locked, so the drawing
+         is never cropped; `meet` makes letterboxing, not clipping, the failure mode if
+         an ancestor ever constrains the height. The viewBox gains 16 units of padding
+         top and bottom so no linework touches the frame edge. -->
+    <svg viewBox="0 -16 1440 296" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;height:auto;aspect-ratio:1440/296;">
+      <defs>
+        <linearGradient id="pw-wire" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#C0B8B0" stop-opacity=".5" /><stop offset=".5" stop-color="#D74627" stop-opacity=".85" /><stop offset="1" stop-color="#C0B8B0" stop-opacity=".5" />
+        </linearGradient>
+        <filter id="pw-glow" x="-60%" y="-300%" width="220%" height="700%">
+          <feGaussianBlur stdDeviation="3.5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+
+      <line x1="0" y1="182" x2="1440" y2="182" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="1 7" />
+      <text x="16" y="174" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.2em;fill:#625B53;">GROUND LEVEL</text>
+
+      <g stroke="#C0B8B0" stroke-width="1.2" fill="none" stroke-linecap="round">
+        <path d="M150 182 L150 44 M126 182 L150 150 M174 182 L150 150 M132 96 L168 96 M128 70 L172 70" />
+        <path d="M370 182 L370 44 M346 182 L370 150 M394 182 L370 150 M352 96 L388 96 M348 70 L392 70" />
+      </g>
+      <g fill="#D74627" opacity=".55">
+        <circle cx="138" cy="74" r="2.4" /><circle cx="162" cy="74" r="2.4" /><circle cx="358" cy="74" r="2.4" /><circle cx="382" cy="74" r="2.4" />
+      </g>
+
+      <g fill="none" stroke="url(#pw-wire)" stroke-width="1.1">
+        <path d="M-20 66 Q 65 92 150 66 Q 260 96 370 66 L 470 66" />
+        <path d="M-20 82 Q 65 110 150 82 Q 260 114 370 82 L 470 82" />
+      </g>
+
+      <g fill="none" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="4 4">
+        <path d="M150 30 L370 30" /><path d="M150 24 L150 36" /><path d="M370 24 L370 36" />
+      </g>
+      <text x="232" y="22" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.22em;fill:#B3381D;">11 kV OVERHEAD</text>
+
+      <path id="pw-route" d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#D4CCC4" stroke-width="1.6" pathLength="1000" stroke-dasharray="1000" style="animation:drawIn 2s cubic-bezier(.4,0,.2,1) .5s both;" />
+      <path d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#D74627" stroke-width="2.2" stroke-linecap="round" pathLength="1000" stroke-dasharray="42 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 1.9s infinite;" />
+      <!-- Secondary energy. Yellow carries far less contrast than red-orange against
+           white, so it needs more mass and full opacity to read as an equal partner:
+           2.6 wide vs the red's 2.2, and a longer dash. Offset half a cycle from the
+           red pulse so the route reads red -> yellow -> red -> yellow. -->
+      <path d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#EDAE21" stroke-width="2.6" stroke-linecap="round" pathLength="1000" stroke-dasharray="30 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 4.5s infinite;" />
+
+      <g>
+        <rect x="540" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+        <g stroke="#D74627" stroke-width="1.2" fill="none"><circle cx="576" cy="100" r="6" /><path d="M584 106 L602 90 M602 90 L602 96 M602 90 L596 90" stroke-linecap="round" /><path d="M614 90 L614 110 M622 90 L622 110 M630 90 L630 110" opacity=".55" /></g>
+        <text x="540" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">11 kV 5-WAY RMU</text>
+      </g>
+      <g>
+        <rect x="760" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+        <g stroke="#D74627" stroke-width="1.3" fill="none"><circle cx="806" cy="100" r="12" /><circle cx="822" cy="100" r="12" /></g>
+        <text x="760" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">250 kVA TRANSFORMER</text>
+      </g>
+      <g>
+        <rect x="980" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+        <g stroke="#D74627" stroke-width="1.2" fill="none"><rect x="1000" y="86" width="26" height="28" rx="2" /><rect x="1032" y="86" width="26" height="28" rx="2" /><rect x="1064" y="86" width="26" height="28" rx="2" /></g>
+        <text x="980" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">400A LT KIOSK</text>
+      </g>
+
+      <g fill="none" stroke="#C7BFB7" stroke-width="1.4" stroke-linecap="round">
+        <path d="M1220 214 L1220 250" /><path d="M1300 214 L1300 250" /><path d="M1380 214 L1380 250" />
+      </g>
+      <!-- Service drops: two red-orange, one yellow, so both brand colours are also
+           travelling through separate paths at the same instant rather than only in
+           sequence. Colours are fixed per drop, not cycled. -->
+      <g fill="none" stroke="#D74627" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="6 10" opacity=".8">
+        <path d="M1220 214 L1220 250" style="animation:flow 1.4s linear infinite;" />
+        <path d="M1380 214 L1380 250" style="animation:flow 1.4s linear .5s infinite;" />
+      </g>
+      <g fill="none" stroke="#EDAE21" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="6 10">
+        <path d="M1300 214 L1300 250" style="animation:flow 1.4s linear .25s infinite;" />
+      </g>
+      <g fill="#FFFFFF" stroke="rgba(20,18,16,.3)"><rect x="1208" y="250" width="24" height="14" rx="3" /><rect x="1288" y="250" width="24" height="14" rx="3" /><rect x="1368" y="250" width="24" height="14" rx="3" /></g>
+      <text x="1150" y="200" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.2em;fill:#B3381D;">HT &amp; LT UNDERGROUND</text>
+    </svg>
+  </div>
+</section>
+
+<section ref="{{ statsRef }}" style="position:relative;border-top:1px solid rgba(20,18,16,.1);border-bottom:1px solid rgba(20,18,16,.1);background:linear-gradient(180deg,#F7F5F3,#FFFFFF);">
+  <div style="max-width:1360px;margin:0 auto;padding:0 10px;">
+   <div style="overflow:hidden;">
+   <div style="margin-left:-1px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 34%;">
+      <div style="font:900 clamp(48px,5vw,74px)/1 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;">{{ cy }}<span style="color:#D74627;">+</span></div>
+      <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">YEARS EXPERIENCE</div>
+    </div>
+    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 38%;">
+      <div style="font:900 clamp(48px,5vw,74px)/1 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;">{{ cp }}<span style="color:#D74627;">+</span></div>
+      <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">PROJECTS COMPLETED</div>
+    </div>
+    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 42%;">
+      <div style="font:900 clamp(38px,3.6vw,56px)/1.05 Satoshi,Inter,sans-serif;letter-spacing:-.03em;color:#141414;">Class I</div>
+      <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">LICENSED CONTRACTOR</div>
+    </div>
+    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 46%;">
+      <div style="font:900 clamp(38px,3.6vw,56px)/1.05 Satoshi,Inter,sans-serif;letter-spacing:-.03em;color:#141414;">HT &amp; LT</div>
+      <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">SPECIALISTS</div>
+    </div>
+   </div>
+   </div>
+  </div>
+</section>
+
+<section id="about" style="position:relative;padding:150px 0 130px;">
+  <div style="position:absolute;top:-10%;left:-8%;width:44vw;height:44vw;border-radius:50%;background:radial-gradient(circle,rgba(215,70,39,.085),transparent 68%);filter:blur(30px);pointer-events:none;"></div>
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:clamp(48px,7vw,120px);align-items:start;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 30%;">
+          <span style="width:28px;height:1px;background:#D74627;"></span>
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">ABOUT POWERTEK</span>
+        </div>
+        <h2 style="margin:26px 0 0;font:900 clamp(34px,4vw,60px)/1.04 Satoshi,Inter,sans-serif;letter-spacing:-.038em;color:#141414;text-wrap:balance;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Three decades of external electrical infrastructure.</h2>
+        <p style="margin:30px 0 0;max-width:52ch;font:400 16px/1.75 Inter,sans-serif;color:#5C554E;text-wrap:pretty;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 36%;">Powertek is a Class I Licensed Electrical Contractor based in Bangalore, established in 1995. We execute complete external electrical infrastructure — from 11 kV incoming and RMU installation through transformers, LT panels, underground cabling and DG sets, to final testing and commissioning.</p>
+        <p style="margin:20px 0 0;max-width:52ch;font:400 16px/1.75 Inter,sans-serif;color:#5C554E;text-wrap:pretty;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 40%;">Our teams handle labour, liaison and BESCOM coordination in-house, which means a single accountable contractor from drawing approval to energisation.</p>
+
+        <div style="display:grid;gap:14px;margin-top:46px;">
+          <div style="padding:28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 34%;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D;">MISSION</div>
+            <p style="margin:14px 0 0;font:400 15px/1.7 Inter,sans-serif;color:#3E3A36;">To deliver electrical infrastructure that is energised on schedule, inspected without exception, and built to run for decades without intervention.</p>
+          </div>
+          <div style="padding:28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 38%;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D;">VISION</div>
+            <p style="margin:14px 0 0;font:400 15px/1.7 Inter,sans-serif;color:#3E3A36;">To be the electrical contractor that Bengaluru's largest developers and hospitals call first for HT and LT works.</p>
+          </div>
+          <div style="padding:28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 42%;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D;">CORE VALUES</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+              <span style="font:500 12px/1 Inter,sans-serif;color:#37332F;background:#FDF3EF;border:1px solid rgba(215,70,39,.2);padding:9px 15px;border-radius:100px;">Safety first</span>
+              <span style="font:500 12px/1 Inter,sans-serif;color:#37332F;background:#FDF3EF;border:1px solid rgba(215,70,39,.2);padding:9px 15px;border-radius:100px;">Statutory compliance</span>
+              <span style="font:500 12px/1 Inter,sans-serif;color:#37332F;background:#FDF3EF;border:1px solid rgba(215,70,39,.2);padding:9px 15px;border-radius:100px;">Engineering precision</span>
+              <span style="font:500 12px/1 Inter,sans-serif;color:#37332F;background:#FDF3EF;border:1px solid rgba(215,70,39,.2);padding:9px 15px;border-radius:100px;">Accountability</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative;padding-left:8px;">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#5F584F;margin-bottom:40px;">TRACK RECORD</div>
+        <div style="position:relative;padding-left:40px;">
+          <div style="position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:rgba(20,18,16,.15);"></div>
+          <div style="position:absolute;left:5px;top:6px;bottom:6px;width:1px;transform-origin:50% 0;background:linear-gradient(180deg,#EDAE21,#D74627 40%,#9C2F17);box-shadow:0 0 8px rgba(215,70,39,.3);animation:sy linear both;animation-timeline:view();animation-range:entry 0% cover 70%;"></div>
+
+          <div style="position:relative;padding-bottom:44px;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 26%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#D74627;box-shadow:0 0 0 4px rgba(215,70,39,.12),0 0 10px rgba(215,70,39,.35);"></div>
+            <div style="font:900 26px/1 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">1995</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">Powertek founded in Bangalore as a licensed electrical contracting firm.</div>
+          </div>
+          <div style="position:relative;padding-bottom:44px;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 32%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(20,18,16,.4);"></div>
+            <div style="font:600 17px/1.3 Inter,sans-serif;color:#1F1E1C;">First Apartment Project</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">Complete internal and external electrification for a residential apartment block.</div>
+          </div>
+          <div style="position:relative;padding-bottom:44px;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 36%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(20,18,16,.4);"></div>
+            <div style="font:600 17px/1.3 Inter,sans-serif;color:#1F1E1C;">Large Scale HT Infrastructure</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">11 kV RMUs, transformers and HT underground networks for multi-tower developments.</div>
+          </div>
+          <div style="position:relative;padding-bottom:44px;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 40%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(20,18,16,.4);"></div>
+            <div style="font:600 17px/1.3 Inter,sans-serif;color:#1F1E1C;">Hospitals</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">Critical-load infrastructure with DG backup, AMF panels and stabilisers.</div>
+          </div>
+          <div style="position:relative;padding-bottom:44px;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 44%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#FFFFFF;border:1px solid rgba(20,18,16,.4);"></div>
+            <div style="font:600 17px/1.3 Inter,sans-serif;color:#1F1E1C;">Premium Layouts</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">Villa and plotted-layout electrification with feeder pillars and individual metering.</div>
+          </div>
+          <div style="position:relative;animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 48%;">
+            <div style="position:absolute;left:-40px;top:5px;width:11px;height:11px;border-radius:50%;background:#D74627;box-shadow:0 0 0 4px rgba(215,70,39,.12),0 0 10px rgba(215,70,39,.35);"></div>
+            <div style="font:900 26px/1 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Today</div>
+            <div style="margin-top:9px;font:400 14px/1.6 Inter,sans-serif;color:#605952;">SCADA-integrated substations, data centres and 100+ completed projects across Bengaluru.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why" style="position:relative;padding:130px 0;background:linear-gradient(180deg,#FFFFFF,#F8F6F4 50%,#FFFFFF);border-top:1px solid rgba(20,18,16,.08);">
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:32px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:28px;height:1px;background:#D74627;"></span>
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">WHY POWERTEK</span>
+        </div>
+        <h2 style="margin:24px 0 0;max-width:22ch;font:900 clamp(34px,4vw,60px)/1.04 Satoshi,Inter,sans-serif;letter-spacing:-.038em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Eight reasons developers hand us the substation.</h2>
+      </div>
+      <div style="font:500 10px/1.8 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#625B53;text-align:right;">08 / CAPABILITIES</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:64px;">
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 30%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">01</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">30+ Years Experience</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Continuously licensed and executing since 1995, through every revision of the state electrical code.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">02</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Class I Licensed Contractor</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Authorised for unlimited-capacity HT and LT works, including 11 kV switchgear and transformers.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 34%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">03</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Complete HT &amp; LT Infrastructure</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">RMU to final distribution board under one contract — no coordination gaps between vendors.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 36%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">04</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Labour + Liaison</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Skilled site labour and BESCOM liaison handled in-house, from sanction to energisation.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 38%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">05</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Experienced Engineers</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Site engineers who have commissioned SCADA substations, data centres and hospital loads.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 40%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">06</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Safety &amp; Compliance</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Documented safe work method, PPE discipline and inspection-ready records on every site.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 42%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">07</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">End-to-End Execution</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Supply, installation, cabling, termination, testing and commissioning as a single scope.</p>
+        </div>
+      </div>
+      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:linear-gradient(158deg,#FDF3EF,#FFFFFF);border:1px solid rgba(215,70,39,.22);box-shadow:0 1px 2px rgba(215,70,39,.05),0 18px 40px -24px rgba(215,70,39,.3);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 44%;" style-hover="border-color:rgba(215,70,39,.55);box-shadow:0 26px 56px -32px rgba(215,70,39,.5)">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">08</div>
+        <div>
+          <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Timely Delivery</div>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#3E3A36;">Handover dates held against developer schedules — the reason clients return project after project.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="position:relative;padding:130px 0;">
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:32px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:28px;height:1px;background:#D74627;"></span>
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">SERVICES</span>
+        </div>
+        <h2 style="margin:24px 0 0;max-width:24ch;font:900 clamp(34px,4vw,60px)/1.04 Satoshi,Inter,sans-serif;letter-spacing:-.038em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Complete external electrical infrastructure.</h2>
+      </div>
+      <div style="font:500 10px/1.8 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#625B53;text-align:right;">SELECT A LINE<br />TO EXPAND SCOPE</div>
+    </div>
+
+    <div style="margin-top:60px;border-bottom:1px solid rgba(20,18,16,.1);">
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 26%;">
+        <div onClick="{{ ts1 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">01</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">HT Works</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">11 kV</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s1 }}">−</sc-if><sc-if value="{{ ns1 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s1 }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <div>
+            <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:50ch;">High-tension works from the incoming 11 kV point: ring main units, VCB panels, metering cubicles, HT underground cable laying, pothead and end terminations, and transformer installation with all statutory approvals.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;">
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">RMU 3 &amp; 5-WAY</span>
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">630A VCB</span>
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">POTHEAD TERMINATION</span>
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">400 sq.mm HT CABLE</span>
+            </div>
+          </div>
+          <div style="position:relative;min-height:170px;border-radius:16px;overflow:hidden;border:1px solid rgba(20,18,16,.13);background:linear-gradient(150deg,#FAF8F6,#FFFFFF),repeating-linear-gradient(0deg,rgba(20,18,16,.07) 0 1px,transparent 1px 26px),repeating-linear-gradient(90deg,rgba(20,18,16,.07) 0 1px,transparent 1px 26px);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.08) 0 1px,transparent 1px 26px),repeating-linear-gradient(90deg,rgba(20,18,16,.08) 0 1px,transparent 1px 26px);"></div>
+            <svg viewBox="0 0 320 170" style="position:absolute;inset:0;width:100%;height:100%;">
+              <g fill="none" stroke="#D74627" stroke-width="1.2"><rect x="34" y="60" width="58" height="48" rx="5" /><circle cx="63" cy="84" r="9" /><rect x="140" y="60" width="58" height="48" rx="5" /><circle cx="160" cy="84" r="12" /><circle cx="178" cy="84" r="12" /><rect x="246" y="60" width="44" height="48" rx="5" /></g>
+              <g fill="none" stroke="#D74627" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="8 12" style="animation:flow 1.6s linear infinite;"><path d="M0 84 L34 84 M92 84 L140 84 M198 84 L246 84 M290 84 L320 84" /></g>
+              <text x="34" y="130" style="font:500 8px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#625B53;">RMU</text>
+              <text x="140" y="130" style="font:500 8px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#625B53;">TRANSFORMER</text>
+              <text x="246" y="130" style="font:500 8px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#625B53;">LT PANEL</text>
+            </svg>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 28%;">
+        <div onClick="{{ ts2 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">02</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">LT Works</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">415 V</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s2 }}">−</sc-if><sc-if value="{{ ns2 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s2 }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <div>
+            <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:50ch;">Low-tension distribution downstream of the transformer: LT main and kiosk panels, metering and distribution boards, feeder pillars, busbar sizing, underground LT cabling and earthing systems.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;">
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">400A–800A LT PANELS</span>
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">FEEDER PILLARS</span>
+              <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#3E3A36;background:#FFFFFF;border:1px solid rgba(20,18,16,.12);padding:9px 13px;border-radius:8px;">EARTHING</span>
+            </div>
+          </div>
+          <div style="position:relative;min-height:170px;border-radius:16px;overflow:hidden;border:1px solid rgba(20,18,16,.13);background:linear-gradient(150deg,#FAF8F6,#FFFFFF);">
+            <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.08) 0 1px,transparent 1px 26px),repeating-linear-gradient(90deg,rgba(20,18,16,.08) 0 1px,transparent 1px 26px);"></div>
+            <svg viewBox="0 0 320 170" style="position:absolute;inset:0;width:100%;height:100%;">
+              <g fill="none" stroke="#D74627" stroke-width="1.2"><rect x="130" y="30" width="60" height="40" rx="4" /><rect x="40" y="112" width="42" height="34" rx="4" /><rect x="139" y="112" width="42" height="34" rx="4" /><rect x="238" y="112" width="42" height="34" rx="4" /></g>
+              <g fill="none" stroke="#D74627" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="7 11" style="animation:flow 1.5s linear infinite;"><path d="M160 70 L160 92 M61 92 L259 92 M61 92 L61 112 M160 92 L160 112 M259 92 L259 112" /></g>
+              <text x="130" y="22" style="font:500 8px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#625B53;">LT MAIN PANEL</text>
+            </svg>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 30%;">
+        <div onClick="{{ ts3 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">03</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Apartment Electrification</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">RESIDENTIAL</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s3 }}">−</sc-if><sc-if value="{{ ns3 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s3 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Full electrification for apartment developments — external substation works, DG backup and synchronising panels, common-area distribution, and individual flat metering coordinated with BESCOM.</p>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 32%;">
+        <div onClick="{{ ts4 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">04</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Residential Layout Electrification</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">LAYOUTS</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s4 }}">−</sc-if><sc-if value="{{ ns4 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s4 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Villa and plotted-layout networks: HT ring distribution, multiple transformer locations, feeder pillars, street lighting, and individual villa metering with master metering at the incoming point.</p>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 34%;">
+        <div onClick="{{ ts5 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">05</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Commercial Projects</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">MALLS · OFFICES</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s5 }}">−</sc-if><sc-if value="{{ ns5 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s5 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Shopping complexes, offices and data centres — higher fault levels, VCB panels, common-area and tenant metering, and DG capacity sized for continuous commercial load.</p>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 36%;">
+        <div onClick="{{ ts6 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">06</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Hospital Electrical Infrastructure</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">CRITICAL LOAD</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s6 }}">−</sc-if><sc-if value="{{ ns6 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s6 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Zero-tolerance environments: AMF panels with automatic changeover, DG sets and exhaust stacks, voltage stabilisers, dedicated earthing, and floor-wise distribution for theatre and ICU loads.</p>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 38%;">
+        <div onClick="{{ ts7 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">07</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Testing &amp; Commissioning</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">HANDOVER</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s7 }}">−</sc-if><sc-if value="{{ ns7 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s7 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Pre-energisation testing and documentation — HT cable pressure and IR tests, transformer oil and ratio tests, relay settings, earth resistance readings, and inspection sign-off records.</p>
+        </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 40%;">
+        <div onClick="{{ ts8 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">08</span>
+          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Liaison &amp; BESCOM Coordination</span>
+          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">APPROVALS</span>
+          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+            <sc-if value="{{ s8 }}">−</sc-if><sc-if value="{{ ns8 }}" hint-placeholder-val="{{ true }}">+</sc-if>
+          </span>
+        </div>
+        <sc-if value="{{ s8 }}">
+        <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Drawing approvals, sanctioned-load applications, inspectorate clearance and BESCOM coordination through to meter installation — handled by our own liaison team, not sub-contracted.</p>
+        </div>
+        </sc-if>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="projects" style="position:relative;padding:130px 0 140px;background:linear-gradient(180deg,#FFFFFF,#F8F6F4 40%,#FFFFFF);border-top:1px solid rgba(20,18,16,.08);">
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+
+    <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:36px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:28px;height:1px;background:#D74627;"></span>
+          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">PROJECTS</span>
+        </div>
+        <h2 style="margin:24px 0 0;max-width:18ch;font:900 clamp(34px,4.4vw,66px)/1.02 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 30%;">Recent completed projects</h2>
+        <div class="pt-daterange" style="display:flex;align-items:center;gap:14px;margin-top:26px;animation:slideInX linear both;animation-timeline:view();animation-range:entry 6% cover 34%;">
+          <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.32em;color:#5F584F;">2023 — 2026</span>
+          <span style="flex:none;width:56px;height:1px;background:linear-gradient(90deg,#D74627,#EDAE21);"></span>
+        </div>
+      </div>
+      <div style="font:500 10px/1.9 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#625B53;text-align:right;">10 PROJECTS<br />BENGALURU</div>
+    </div>
+
+    <div class="pt-grid">
+      <sc-for list="{{ projects }}" as="p">
+      <div class="pt-card-wrap" style="animation:cardIn linear both;animation-timeline:view();animation-range:entry {{ p.r0 }}% cover {{ p.r1 }}%;">
+        <div class="pt-card" onClick="{{ p.open }}" onKeyDown="{{ p.keyOpen }}" role="button" tabindex="0" aria-label="{{ p.aria }}">
+
+          <div class="pt-card-media">
+            <div class="pt-card-media-inner">
+              <sc-if value="{{ p.hero }}">
+                <img class="pt-card-img" src="{{ p.hero }}" alt="{{ p.name }}" loading="lazy" />
+              </sc-if>
+              <sc-if value="{{ p.noHero }}" hint-placeholder-val="{{ true }}">
+                <div class="pt-ph">
+                  <svg class="pt-ph-art" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                    <g fill="none" stroke="#C0B8B0" stroke-width="1.1" stroke-linecap="round">
+                      <path d="M64 150 L64 58 M46 150 L64 126 M82 150 L64 126 M50 96 L78 96" />
+                      <path d="M0 74 Q 32 92 64 74 Q 110 96 156 74 L 320 74" />
+                    </g>
+                    <g fill="none" stroke="#D74627" stroke-width="1.2">
+                      <rect x="182" y="98" width="52" height="38" rx="5" />
+                      <circle cx="208" cy="117" r="8" />
+                      <rect x="252" y="98" width="40" height="38" rx="5" />
+                    </g>
+                    <path d="M0 74 Q 32 92 64 74 Q 110 96 156 74 L 320 74" fill="none" stroke="#EDAE21" stroke-width="2" stroke-linecap="round" pathLength="1000" stroke-dasharray="26 1000" class="pt-ph-pulse" />
+                    <line x1="0" y1="150" x2="320" y2="150" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="1 6" />
+                  </svg>
+                  <div class="pt-ph-label">
+                    <span>PROJECT PHOTOGRAPH</span>
+                    <span class="pt-ph-sub">IMAGE TO BE ADDED</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            <span class="pt-card-cue">VIEW PROJECT <span aria-hidden="true">&#8594;</span></span>
+            <span class="pt-card-accent"></span>
+            <span class="pt-card-spark"></span>
+          </div>
+
+          <div class="pt-card-body">
+            <div class="pt-card-head">
+              <span class="pt-card-num">{{ p.num }}</span>
+              <span class="pt-card-rule"></span>
+            </div>
+            <h3 class="pt-card-title">{{ p.name }}</h3>
+            <div class="pt-card-type">{{ p.type }}</div>
+            <div class="pt-card-date">{{ p.dateLabel }}</div>
+          </div>
+
+        </div>
+      </div>
+      </sc-for>
+    </div>
+
+  </div>
+</section>
+<section id="contact" style="position:relative;padding:130px 0 0;border-top:1px solid rgba(20,18,16,.08);">
+  <div style="position:absolute;top:6%;right:-10%;width:46vw;height:46vw;border-radius:50%;background:radial-gradient(circle,rgba(215,70,39,.075),transparent 68%);filter:blur(30px);pointer-events:none;"></div>
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="width:28px;height:1px;background:#D74627;"></span>
+      <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">CONTACT</span>
+    </div>
+    <h2 style="margin:24px 0 0;max-width:22ch;font:900 clamp(34px,4.4vw,62px)/1.03 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Send us the drawings. We will send back a schedule.</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:clamp(32px,4vw,64px);margin-top:64px;align-items:start;">
+      <div style="display:grid;gap:14px;">
+        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+          <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">EMAIL</div>
+          <a href="mailto:powertek.elec@gmail.com" style="display:inline-block;margin-top:12px;font:500 17px/1.4 Inter,sans-serif;color:#1F1E1C;">powertek.elec@gmail.com</a>
+        </div>
+        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+          <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">TELEPHONE</div>
+          <div style="display:grid;gap:8px;margin-top:14px;">
+            <a href="tel:+919845239932" style="font:500 17px/1.3 Inter,sans-serif;color:#1F1E1C;">+91 98452 39932</a>
+            <a href="tel:+919945243482" style="font:500 17px/1.3 Inter,sans-serif;color:#1F1E1C;">+91 99452 43482</a>
+            <a href="tel:+919741491691" style="font:500 17px/1.3 Inter,sans-serif;color:#1F1E1C;">+91 97414 91691</a>
+          </div>
+        </div>
+        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+          <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">OFFICE</div>
+          <p style="margin:12px 0 0;font:400 16px/1.65 Inter,sans-serif;color:#37332F;">85/2, 5th Cross, Maruthi Nagar,<br />Madiwala, Bengaluru — 560068</p>
+        </div>
+        <a href="https://wa.me/919845239932" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-radius:20px;background:#FDF3EF;border:1px solid rgba(215,70,39,.18);transition:background .4s,border-color .4s,transform .25s cubic-bezier(.2,.9,.2,1);" style-hover="background:#FAE7DF;border-color:rgba(215,70,39,.34)">
+          <span>
+            <span style="display:block;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D;">WHATSAPP</span>
+            <span style="display:block;margin-top:11px;font:600 17px/1.3 Inter,sans-serif;color:#141414;">Message us directly</span>
+          </span>
+          <span style="flex:none;width:36px;height:36px;border-radius:50%;background:rgba(215,70,39,.12);display:grid;place-items:center;color:#9C2F17;font:400 15px/1 Inter,sans-serif;">→</span>
+        </a>
+      </div>
+
+      <form onSubmit="{{ submit }}" style="padding:clamp(26px,3vw,40px);border-radius:24px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 22px 50px -28px rgba(28,20,14,.26);">
+        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">PROJECT ENQUIRY</div>
+        <div style="display:grid;gap:16px;margin-top:26px;">
+          <label style="display:grid;gap:9px;">
+            <span style="font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;color:#6B645C;">NAME</span>
+            <input type="text" name="name" placeholder="Your name" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.3 Inter,sans-serif;outline:none;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6" />
+          </label>
+          <label style="display:grid;gap:9px;">
+            <span style="font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;color:#6B645C;">EMAIL</span>
+            <input type="email" name="email" placeholder="you@company.com" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.3 Inter,sans-serif;outline:none;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6" />
+          </label>
+          <label style="display:grid;gap:9px;">
+            <span style="font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;color:#6B645C;">PHONE</span>
+            <input type="tel" name="phone" placeholder="+91" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.3 Inter,sans-serif;outline:none;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6" />
+          </label>
+          <label style="display:grid;gap:9px;">
+            <span style="font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;color:#6B645C;">PROJECT DETAILS</span>
+            <textarea name="message" rows="4" placeholder="Location, sanctioned load, transformer capacity, expected timeline" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.55 Inter,sans-serif;outline:none;resize:vertical;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6"></textarea>
+          </label>
+        </div>
+        <button type="submit" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;width:100%;margin-top:26px;padding:19px 26px;border:none;border-radius:100px;cursor:pointer;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;display:flex;align-items:center;justify-content:center;gap:12px;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
+          <sc-if value="{{ idle }}" hint-placeholder-val="{{ true }}">Send Enquiry</sc-if>
+          <sc-if value="{{ sending }}">
+            <span style="width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:currentColor;animation:spin .7s linear infinite;"></span>
+            Sending
+          </sc-if>
+          <sc-if value="{{ sent }}">Enquiry Received</sc-if>
+          <span style="position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:sheen 2.6s cubic-bezier(.4,0,.2,1) infinite;pointer-events:none;"></span>
+        </button>
+        <sc-if value="{{ sent }}">
+        <p style="margin:18px 0 0;font:400 13px/1.6 Inter,sans-serif;color:#6B645C;animation:riseSm .5s cubic-bezier(.2,.9,.2,1) both;">Thank you. We will respond within one working day. For urgent site requirements, call +91 98452 39932.</p>
+        </sc-if>
+      </form>
+    </div>
+
+    <div style="position:relative;overflow:hidden;margin-top:clamp(40px,5vw,72px);height:clamp(300px,38vh,420px);border-radius:24px;border:1px solid rgba(20,18,16,.13);background:linear-gradient(150deg,#F7F5F3,#FCFAF9);animation:rise linear both;animation-timeline:view();animation-range:entry 3% cover 30%;">
+      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.055) 0 1px,transparent 1px 42px),repeating-linear-gradient(90deg,rgba(20,18,16,.055) 0 1px,transparent 1px 42px);"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 55%,rgba(215,70,39,.07),transparent 70%);"></div>
+      <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:32px;">
+        <div>
+          <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:#D74627;box-shadow:0 0 0 8px rgba(215,70,39,.1),0 0 0 18px rgba(215,70,39,.05),0 0 18px rgba(215,70,39,.4);animation:glowPulse 2.6s ease-in-out infinite;"></div>
+          <div style="margin-top:24px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.28em;color:#5F584F;">GOOGLE MAPS EMBED</div>
+          <div style="margin-top:12px;font:500 14px/1.6 'IBM Plex Mono',monospace;letter-spacing:.05em;color:#5C554E;">MARUTHI NAGAR · MADIWALA · BENGALURU 560068</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:clamp(70px,8vw,120px);border-top:1px solid rgba(20,18,16,.1);background:#F7F5F3;">
+    <div style="max-width:1360px;margin:0 auto;padding:64px 40px 40px;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px;">
+        <div style="max-width:34ch;">
+          <div style="display:flex;align-items:center;gap:13px;">
+            <img src="assets/powertek-mark.png" alt="Powertek logo" style="width:38px;height:auto;display:block;" />
+            <span style="display:flex;flex-direction:column;line-height:1;">
+              <span style="font:900 21px/1 Satoshi,Inter,sans-serif;letter-spacing:.16em;color:#141414;">POWERTEK</span>
+              <span style="font:400 9px/1 'IBM Plex Mono',monospace;letter-spacing:.15em;color:#5A534C;margin-top:6px;">CLASS I ELECTRICAL CONTRACTORS,<br />CONSULTANTS &amp; ENGINEERS</span>
+            </span>
+          </div>
+          <p style="margin:26px 0 0;font:400 14px/1.7 Inter,sans-serif;color:#5C554E;">Complete external electrical infrastructure across Bengaluru since 1995. HT &amp; LT works, layout electrification, testing and commissioning.</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,90px);">
+          <div style="display:grid;gap:14px;align-content:start;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#625B53;">SECTIONS</div>
+            <a href="#about" style="font:400 14px/1 Inter,sans-serif;color:#605952;">About</a>
+            <a href="#why" style="font:400 14px/1 Inter,sans-serif;color:#605952;">Why Powertek</a>
+            <a href="#services" style="font:400 14px/1 Inter,sans-serif;color:#605952;">Services</a>
+            <a href="#projects" style="font:400 14px/1 Inter,sans-serif;color:#605952;">Projects</a>
+            <a href="#contact" style="font:400 14px/1 Inter,sans-serif;color:#605952;">Contact</a>
+          </div>
+          <div style="display:grid;gap:14px;align-content:start;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#625B53;">CAPABILITIES</div>
+            <span style="font:400 14px/1 Inter,sans-serif;color:#605952;">HT Works</span>
+            <span style="font:400 14px/1 Inter,sans-serif;color:#605952;">LT Works</span>
+            <span style="font:400 14px/1 Inter,sans-serif;color:#605952;">Labour + Liaison</span>
+            <span style="font:400 14px/1 Inter,sans-serif;color:#605952;">BESCOM Coordination</span>
+            <span style="font:400 14px/1 Inter,sans-serif;color:#605952;">Testing &amp; Commissioning</span>
+          </div>
+          <div style="display:grid;gap:14px;align-content:start;">
+            <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#625B53;">REACH US</div>
+            <a href="mailto:powertek.elec@gmail.com" style="font:400 14px/1 Inter,sans-serif;color:#605952;">powertek.elec@gmail.com</a>
+            <a href="tel:+919845239932" style="font:400 14px/1 Inter,sans-serif;color:#605952;">+91 98452 39932</a>
+            <a href="https://wa.me/919845239932" style="font:400 14px/1 Inter,sans-serif;color:#605952;">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:56px;padding-top:26px;border-top:1px solid rgba(20,18,16,.09);">
+        <span style="font:400 11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#625B53;">© 1995–2026 POWERTEK · CLASS I LICENSED ELECTRICAL CONTRACTOR · BENGALURU</span>
+        <span style="font:400 11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;color:#625B53;">EST. 1995</span>
+      </div>
+    </div>
+  </footer>
+</section>
+
+
+<sc-if value="{{ m }}">
+<div class="pt-modal-root" onClick="{{ closeModal }}">
+  <div class="pt-modal-backdrop"></div>
+
+  <div class="pt-modal" role="dialog" aria-modal="true" aria-label="{{ m.aria }}" ref="{{ modalRef }}" tabindex="-1" onClick="{{ stopProp }}" onKeyDown="{{ trapKeys }}">
+
+    <button type="button" class="pt-modal-x" onClick="{{ closeModal }}" aria-label="Close project">
+      <span aria-hidden="true">&#215;</span>
+    </button>
+
+    <div class="pt-modal-scroll" key="{{ m.key }}">
+
+      <header class="pt-modal-head">
+        <div class="pt-modal-eyebrow">PROJECT / {{ m.num }}</div>
+        <h2 class="pt-modal-title">{{ m.name }}</h2>
+        <div class="pt-modal-sub">{{ m.type }}</div>
+        <sc-if value="{{ m.scale }}">
+          <div class="pt-modal-scale">{{ m.scale }}</div>
+        </sc-if>
+        <div class="pt-modal-completed">
+          <span class="pt-modal-completed-k">COMPLETED</span>
+          <span class="pt-modal-completed-v">{{ m.completed }}</span>
+        </div>
+      </header>
+
+      <div class="pt-modal-gallery">
+        <sc-for list="{{ m.images }}" as="im">
+          <figure class="pt-modal-fig">
+            <img src="{{ im.src }}" alt="{{ im.alt }}" loading="lazy" />
+          </figure>
+        </sc-for>
+        <sc-if value="{{ m.noImages }}" hint-placeholder-val="{{ true }}">
+          <div class="pt-modal-fig pt-modal-fig-ph">
+            <div class="pt-ph">
+              <svg class="pt-ph-art" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g fill="none" stroke="#C0B8B0" stroke-width="1.1" stroke-linecap="round">
+                  <path d="M64 150 L64 58 M46 150 L64 126 M82 150 L64 126 M50 96 L78 96" />
+                  <path d="M0 74 Q 32 92 64 74 Q 110 96 156 74 L 320 74" />
+                </g>
+                <g fill="none" stroke="#D74627" stroke-width="1.2">
+                  <rect x="182" y="98" width="52" height="38" rx="5" />
+                  <circle cx="208" cy="117" r="8" />
+                  <rect x="252" y="98" width="40" height="38" rx="5" />
+                </g>
+                <path d="M0 74 Q 32 92 64 74 Q 110 96 156 74 L 320 74" fill="none" stroke="#EDAE21" stroke-width="2" stroke-linecap="round" pathLength="1000" stroke-dasharray="26 1000" class="pt-ph-pulse" />
+                <line x1="0" y1="150" x2="320" y2="150" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="1 6" />
+              </svg>
+              <div class="pt-ph-label">
+                <span>PROJECT PHOTOGRAPH</span>
+                <span class="pt-ph-sub">IMAGE TO BE ADDED</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <section class="pt-modal-block pt-modal-b1">
+        <div class="pt-modal-label">PROJECT OVERVIEW</div>
+        <p class="pt-modal-body">{{ m.description }}</p>
+      </section>
+
+      <section class="pt-modal-block pt-modal-b2">
+        <div class="pt-modal-label">SCOPE OF WORK</div>
+        <ol class="pt-scope">
+          <sc-for list="{{ m.scope }}" as="s">
+            <li class="pt-scope-item" style="animation-delay:{{ s.delay }}ms;">
+              <span class="pt-scope-n">{{ s.n }}</span>
+              <span class="pt-scope-rule"></span>
+              <span class="pt-scope-t">{{ s.text }}</span>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+
+      <section class="pt-modal-block pt-modal-b3">
+        <div class="pt-modal-label">TECHNICAL PROFILE</div>
+        <div class="pt-tech">
+          <sc-for list="{{ m.tech }}" as="t">
+            <div class="pt-tech-cell">
+              <div class="pt-tech-k">{{ t.label }}</div>
+              <div class="pt-tech-v">{{ t.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <nav class="pt-modal-nav">
+        <sc-if value="{{ m.hasPrev }}">
+          <button type="button" class="pt-nav-btn" onClick="{{ prevProject }}">
+            <span aria-hidden="true">&#8592;</span>
+            <span class="pt-nav-btn-t">
+              <span class="pt-nav-btn-k">PREVIOUS PROJECT</span>
+              <span class="pt-nav-btn-v">{{ m.prevName }}</span>
+            </span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ m.noPrev }}">
+          <span class="pt-nav-btn pt-nav-btn-off" aria-disabled="true">
+            <span aria-hidden="true">&#8592;</span>
+            <span class="pt-nav-btn-t"><span class="pt-nav-btn-k">PREVIOUS PROJECT</span><span class="pt-nav-btn-v">—</span></span>
+          </span>
+        </sc-if>
+
+        <button type="button" class="pt-modal-close-btn" onClick="{{ closeModal }}">CLOSE PROJECT</button>
+
+        <sc-if value="{{ m.hasNext }}">
+          <button type="button" class="pt-nav-btn pt-nav-btn-next" onClick="{{ nextProject }}">
+            <span class="pt-nav-btn-t">
+              <span class="pt-nav-btn-k">NEXT PROJECT</span>
+              <span class="pt-nav-btn-v">{{ m.nextName }}</span>
+            </span>
+            <span aria-hidden="true">&#8594;</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ m.noNext }}">
+          <span class="pt-nav-btn pt-nav-btn-next pt-nav-btn-off" aria-disabled="true">
+            <span class="pt-nav-btn-t"><span class="pt-nav-btn-k">NEXT PROJECT</span><span class="pt-nav-btn-v">—</span></span>
+            <span aria-hidden="true">&#8594;</span>
+          </span>
+        </sc-if>
+      </nav>
+
+    </div>
+  </div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showLoader&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;motionLevel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cinematic&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;cinematic&quot;,&quot;tsType&quot;:&quot;'cinematic' | 'calm'&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;particleCount&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:86,&quot;min&quot;:0,&quot;max&quot;:150,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+/* ---------------------------------------------------------------------------
+   PROJECT DATA — single source of truth for the Projects section.
+   The grid and the modal both render from this array, so adding project 11 is
+   one entry here and nothing else. Descriptions and scope lines are verbatim
+   as supplied; nothing is derived or invented.
+
+   `images` is the extension point for real photography. Give a project
+   `images: [{ src: 'uploads/meadows-01.jpg', alt: '...' }, ...]` and the card
+   uses images[0] as its hero while the modal shows the full set. Leave it empty
+   and both fall back to the engineered placeholder — no broken image icons.
+--------------------------------------------------------------------------- */
+const PROJECT_DATA = [
+  {
+    name: 'Confident Meadows',
+    type: 'Residential Apartment Project',
+    scale: '140 Premium Apartments',
+    completed: 'April 2025',
+    description: 'Powertek executed the complete external electrification works for a 140-unit residential apartment project comprising three G+11 residential towers. The scope included the supply, installation, testing and commissioning of the entire HT and LT electrical infrastructure, ensuring a reliable and compliant power distribution system.',
+    scope: [
+      'Supply & Installation of 11 kV 5-Way RMU',
+      'Installation of 3 × 250 kVA Distribution Transformers',
+      '400A LT Kiosk Panels, Metering Panels & Distribution Panels',
+      'HT & LT Underground Cable Laying (Trench & Cable Tray)',
+      'HT Cable Pothead & End Termination Works',
+      'Installation of 320 kVA Diesel Generator with Stack',
+      'Advanced Lightning Protection System with Lightning Counter'
+    ],
+    images: []
+  },
+  {
+    name: 'Confident Square Mall',
+    type: 'Commercial Shopping Complex',
+    scale: '80 Commercial Units',
+    completed: 'September 2024',
+    description: 'Complete external electrification executed for a large commercial shopping complex comprising 80 retail units. The project involved installation of HT power distribution equipment, transformer systems, LT panels and generator backup to ensure uninterrupted electrical supply.',
+    scope: [
+      '11 kV 3-Way RMU Installation',
+      '11 kV Metering Cubicle & 630A VCB Panel',
+      '500 kVA Transformer Installation',
+      '800A LT Kiosk, Metering & Distribution Panels',
+      'Common Area & AC Panels',
+      'HT & LT Underground Cabling',
+      '320 kVA Generator with Stack Installation'
+    ],
+    images: []
+  },
+  {
+    name: '42 Estates – Address One',
+    type: 'Commercial Data Centre',
+    scale: '',
+    completed: 'April 2024',
+    description: 'Powertek executed complete HT & LT electrical infrastructure for a commercial data centre, providing dependable power distribution and backup systems suitable for mission-critical operations.',
+    scope: [
+      '11 kV RMU Installation',
+      '11 kV Metering Cubicle & LBS Panel',
+      '500 kVA Transformer',
+      '800A LT Main Panel & Distribution Panels',
+      'HT & LT Cable Laying',
+      '500 kVA DG Set with 15-Metre Stack'
+    ],
+    images: []
+  },
+  {
+    name: 'Confident Oxygen',
+    type: 'Residential & Commercial Mixed Development',
+    scale: '250 Apartments + 72 Commercial Shops',
+    completed: 'March 2023',
+    description: 'Powertek delivered complete external electrification for a mixed-use residential and commercial development, providing HT/LT distribution systems, transformer installations and backup power infrastructure.',
+    scope: [
+      '11 kV 5-Way RMU',
+      '2 × 500 kVA + 1 × 250 kVA Transformers',
+      '800A LT Kiosk & Metering Panels',
+      'Distribution & Common Area Panels',
+      'HT & LT Cable Laying',
+      'Synchronizing, AMF & AC Panels',
+      'DG Installation & Stack Works'
+    ],
+    images: []
+  },
+  {
+    name: 'Fortius Land Developers LLP (Under The Sun)',
+    type: 'Luxury Villa Development',
+    scale: '137 Premium Villas',
+    completed: 'March 2024',
+    description: 'Powertek successfully executed complete electrical infrastructure for a premium villa township, covering HT power distribution, transformer installations, DG synchronization and complete layout electrification.',
+    scope: [
+      '11 kV 4-Way & 3-Way RMU Yard',
+      '3 × 250 kVA + 1 × 250 kVA OLTC Transformers',
+      '800A LT Kiosk Panels',
+      '400A Feeder Pillar Panels',
+      'HT & LT Cable Network',
+      'Synchronizing, AMF & DG Distribution Panels',
+      '500 kVA & 250 kVA DG Sets',
+      'Voltage Stabilizer Installation'
+    ],
+    images: []
+  },
+  {
+    name: '42 Estates – Queen Square',
+    type: 'Luxury Villa Layout',
+    scale: '',
+    completed: 'April 2024',
+    description: 'Powertek carried out the complete external electrification works for a premium villa layout, including transformer installation, feeder pillar systems, DG backup and villa metering infrastructure.',
+    scope: [
+      '11 kV 4-Way RMU',
+      '2 × 250 kVA Transformers',
+      '800A LT Kiosk Panels',
+      '400A Feeder Pillar Panels',
+      'HT & LT Cable Works',
+      'Synchronizing & DG Distribution Panels',
+      'DG Installation with Stack',
+      'Villa Cabling & Metering Panels'
+    ],
+    images: []
+  },
+  {
+    name: 'Nambiar Builders Pvt. Ltd. – Ellegenza',
+    type: 'Residential Layout Electrification',
+    scale: '',
+    completed: 'September 2025',
+    description: 'Powertek executed one of its most comprehensive infrastructure projects, involving direct feeder connectivity from a KPTCL receiving station, SCADA implementation and large-scale HT/LT distribution for a premium residential layout.',
+    scope: [
+      '11 kV 630A MEI Breaker Feeder Panel',
+      'Control & Relay (C&R) Panels',
+      'SCADA System Implementation',
+      '400 sq.mm HT Cable Installation',
+      'Double-Circuit Coyote Conductor Network',
+      '11 kV RMU Installation',
+      'Installation of 8 × 250 kVA Transformers',
+      '400A LT Kiosk & Metering Panels',
+      'HT & LT Underground Cabling'
+    ],
+    images: []
+  },
+  {
+    name: 'Bharath Co-operative Society (SM Raju & Others)',
+    type: 'Residential Layout Electrification',
+    scale: '',
+    completed: 'August 2025',
+    description: 'Complete electrification of a residential layout with feeder supply from a 220/11 kV KPTCL receiving station, including overhead HT/LT distribution, transformer installations and modern control systems.',
+    scope: [
+      '11 kV 630A MEI Breaker Feeder Panel',
+      'C&R Panels & Twin Feeder Panel',
+      'SCADA System',
+      '400 sq.mm HT Cable',
+      'Double-Circuit Coyote Conductor',
+      'Spun Pole Mounted GOS System',
+      'Installation of 10 × 250 kVA Transformers',
+      '400A LT Kiosk with Master Metering',
+      'HT & LT Overhead Lines',
+      'LED Street Lighting'
+    ],
+    images: []
+  },
+  {
+    name: "St. John's Medical College Hospital",
+    type: 'Healthcare Infrastructure',
+    scale: '',
+    completed: 'February 2024',
+    description: 'Powertek executed generator backup infrastructure to strengthen uninterrupted power supply for critical healthcare operations.',
+    scope: [
+      '250 kVA DG Set Installation',
+      'AMF Panel Installation',
+      '12-Metre Exhaust Stack',
+      'Cabling',
+      'Earthing Works'
+    ],
+    images: []
+  },
+  {
+    name: 'Apollo Specialty Hospital Pvt. Ltd.',
+    type: 'Healthcare Infrastructure',
+    scale: '',
+    completed: 'June 2025',
+    description: 'Powertek completed electrical infrastructure works across Apollo Cradle and Apollo One facilities, delivering stabilizer systems, LT distribution and metering solutions.',
+    scope: [
+      '315 kVA Oil-Cooled Stabilizer',
+      'Cabling',
+      'Distribution Panels',
+      'LT Metering Panels',
+      'Floor-wise Distribution Panels'
+    ],
+    images: []
+  }
+];
+
+const pad2 = (n) => (n < 10 ? '0' : '') + n;
+
+class Component extends DCLogic {
+  state = { cy: 30, cp: 100, svc: {}, sending: false, sent: false, openIndex: null };
+
+  canvasRef = React.createRef();
+  statsRef = React.createRef();
+  modalRef = React.createRef();
+
+  componentDidMount() {
+    this.startCanvas();
+    this.watchStats();
+    document.addEventListener('keydown', this.onGlobalKey);
+  }
+
+  // The DC runtime calls componentDidUpdate(prevProps) only — there is no
+  // prevState argument — so the open/close transition is tracked here instead of
+  // being derived from it. Without this, the body scroll lock would never be
+  // released and lastFocus would be overwritten on every re-render.
+  openWas = null;
+
+  componentDidUpdate() {
+    const was = this.openWas;
+    const now = this.state.openIndex == null ? null : this.state.openIndex;
+    if (was === now) return;
+    if (was === null) {
+      // Remember where focus came from so it can be restored on close, and stop
+      // the page behind the dossier from scrolling.
+      this.lastFocus = document.activeElement;
+      this.prevBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+    if (now === null) this.releaseModal();
+    else if (this.modalRef.current) this.modalRef.current.focus();
+    this.openWas = now;
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    window.removeEventListener('resize', this.onResize);
+    if (this.cv) {
+      this.cv.removeEventListener('pointermove', this.onPointer);
+      this.cv.removeEventListener('pointerleave', this.onLeave);
+    }
+    if (this.io) this.io.disconnect();
+    clearTimeout(this.sendTimer);
+    document.removeEventListener('keydown', this.onGlobalKey);
+    this.releaseModal();
+  }
+
+  /* ---------------- project dossier modal ---------------- */
+
+  releaseModal() {
+    if (this.prevBodyOverflow !== undefined) {
+      document.body.style.overflow = this.prevBodyOverflow;
+      this.prevBodyOverflow = undefined;
+    }
+    if (this.lastFocus && this.lastFocus.focus) {
+      try { this.lastFocus.focus(); } catch (err) {}
+      this.lastFocus = null;
+    }
+  }
+
+  onGlobalKey = (e) => {
+    if (this.state.openIndex == null) return;
+    if (e.key === 'Escape') { e.preventDefault(); this.closeModal(); return; }
+    if (e.key === 'ArrowLeft') this.stepProject(-1);
+    if (e.key === 'ArrowRight') this.stepProject(1);
+  };
+
+  openProject = (i) => this.setState({ openIndex: i });
+
+  closeModal = () => this.setState({ openIndex: null });
+
+  stopProp = (e) => e.stopPropagation();
+
+  // The dialog is a focus target itself, so a plain tab-through cannot escape
+  // behind it in practice; this only keeps Enter/Space on the panel from
+  // bubbling out to the backdrop's close handler.
+  trapKeys = (e) => { if (e.key === 'Enter' || e.key === ' ') e.stopPropagation(); };
+
+  stepProject = (d) => {
+    const i = this.state.openIndex;
+    if (i == null) return;
+    const next = i + d;
+    if (next < 0 || next >= PROJECT_DATA.length) return;
+    this.setState({ openIndex: next });
+  };
+
+  prevProject = () => this.stepProject(-1);
+  nextProject = () => this.stepProject(1);
+
+  // Builds the render-ready view of one project: numbering, the derived
+  // technical profile, scope numbering and the image/placeholder decision.
+  projectView(i) {
+    const p = PROJECT_DATA[i];
+    if (!p) return null;
+    const prev = PROJECT_DATA[i - 1];
+    const nx = PROJECT_DATA[i + 1];
+    const tech = [{ label: 'PROJECT TYPE', value: p.type }];
+    if (p.scale) tech.push({ label: 'PROJECT SCALE', value: p.scale });
+    tech.push({ label: 'COMPLETED', value: p.completed });
+    tech.push({ label: 'SCOPE ITEMS', value: pad2(p.scope.length) });
+    return {
+      key: 'pj' + i,
+      num: pad2(i + 1),
+      name: p.name,
+      type: p.type,
+      scale: p.scale,
+      completed: p.completed,
+      description: p.description,
+      aria: p.name + ' — ' + p.type,
+      images: p.images,
+      noImages: !p.images.length,
+      scope: p.scope.map((text, k) => ({ n: pad2(k + 1), text: text, delay: 90 + k * 55 })),
+      tech: tech,
+      hasPrev: !!prev,
+      noPrev: !prev,
+      prevName: prev ? prev.name : '',
+      hasNext: !!nx,
+      noNext: !nx,
+      nextName: nx ? nx.name : ''
+    };
+  }
+
+  watchStats() {
+    const el = this.statsRef.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && !this.counted) {
+          this.counted = true;
+          this.io.disconnect();
+          this.countTo('cy', 30, 1500);
+          this.countTo('cp', 100, 1800);
+        }
+      });
+    }, { threshold: 0.35 });
+    this.io.observe(el);
+  }
+
+  countTo(key, target, dur) {
+    const t0 = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      this.setState({ [key]: Math.round(target * ease(t)) });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    this.setState({ [key]: 0 }, () => requestAnimationFrame(step));
+  }
+
+  startCanvas() {
+    const cv = this.canvasRef.current;
+    if (!cv) return;
+    this.cv = cv;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+    const calm = (this.props.motionLevel || 'cinematic') === 'calm';
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const N = Math.max(0, Math.round(this.props.particleCount != null ? this.props.particleCount : (calm ? 46 : 86)));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0;
+    const pts = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+
+    const seed = () => {
+      pts.length = 0;
+      for (let i = 0; i < N; i++) {
+        pts.push({
+          x: Math.random() * w,
+          y: Math.random() * h * 0.72,
+          vx: (Math.random() - 0.5) * 0.13,
+          vy: (Math.random() - 0.5) * 0.1,
+          r: 0.7 + Math.random() * 1.5,
+          ox: 0, oy: 0
+        });
+      }
+    };
+
+    this.onResize = () => {
+      const r = cv.getBoundingClientRect();
+      w = Math.max(1, r.width); h = Math.max(1, r.height);
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (!pts.length) seed();
+    };
+    this.onPointer = (e) => {
+      const r = cv.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.active = true;
+    };
+    this.onLeave = () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; };
+
+    this.onResize();
+    seed();
+    window.addEventListener('resize', this.onResize);
+    cv.addEventListener('pointermove', this.onPointer);
+    cv.addEventListener('pointerleave', this.onLeave);
+
+    // travelling energy pulses along the perspective grid.
+    // `glow`/`core` carry the Powertek accents — red-orange is the primary
+    // energy, one lane runs brand yellow as the secondary.
+    // `boost` compensates for yellow's much lower contrast against the white
+    // background — without it the yellow lane reads as a faint smudge next to red.
+    const PULSE_RED = { glow: '215,70,39', core: '179,56,29', boost: 1 };
+    const PULSE_YELLOW = { glow: '237,174,33', core: '201,143,20', boost: 1.45 };
+    const pulses = calm ? [] : [
+      { lane: -3, t: 0.1, sp: 0.0022, hue: PULSE_RED },
+      { lane: 2, t: 0.55, sp: 0.0017, hue: PULSE_YELLOW },
+      { lane: 6, t: 0.8, sp: 0.0026, hue: PULSE_RED }
+    ];
+
+    const t0 = performance.now();
+    const draw = (now) => {
+      const time = (now - t0) / 1000;
+      ctx.clearRect(0, 0, w, h);
+
+      const horizon = h * 0.56;
+      const spread = w / 7.5;
+
+      // converging verticals
+      for (let i = -12; i <= 12; i++) {
+        const bx = w / 2 + i * spread;
+        const tx = w / 2 + i * 20;
+        const a = 0.16 * (1 - Math.min(1, Math.abs(i) / 13));
+        ctx.strokeStyle = 'rgba(20,18,16,' + a.toFixed(3) + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(tx, horizon); ctx.lineTo(bx, h + 60); ctx.stroke();
+      }
+
+      // receding horizontals, drifting toward the viewer
+      const rows = 15;
+      const drift = reduce ? 0 : (time * 0.05) % 1;
+      for (let r = 0; r < rows; r++) {
+        const t = (r + drift) / rows;
+        const y = horizon + (h + 60 - horizon) * Math.pow(t, 2.7);
+        const a = 0.2 * Math.pow(t, 0.7);
+        ctx.strokeStyle = 'rgba(20,18,16,' + a.toFixed(3) + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // energy pulses running down grid lanes
+      pulses.forEach((p) => {
+        if (!reduce) p.t += p.sp;
+        if (p.t > 1) p.t = 0;
+        const t = p.t;
+        const y = horizon + (h + 60 - horizon) * Math.pow(t, 2.7);
+        const bx = w / 2 + p.lane * spread;
+        const tx = w / 2 + p.lane * 20;
+        const x = tx + (bx - tx) * Math.pow(t, 2.7);
+        const hue = p.hue || PULSE_RED;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, 46);
+        g.addColorStop(0, 'rgba(' + hue.glow + ',' + Math.min(1, 0.42 * hue.boost * (0.25 + t)).toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(' + hue.glow + ',0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, 46, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(' + hue.core + ',' + Math.min(1, (0.35 + 0.5 * t) * hue.boost).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(x, y, 1.6 + 1.6 * t, 0, Math.PI * 2); ctx.fill();
+      });
+
+      // particle field + glowing connection lines
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        if (!reduce) { p.x += p.vx; p.y += p.vy; }
+        if (p.x < -20) p.x = w + 20; if (p.x > w + 20) p.x = -20;
+        if (p.y < -20) p.y = h * 0.72; if (p.y > h * 0.74) p.y = -20;
+
+        let tx = 0, ty = 0;
+        if (mouse.active) {
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < 26000 && d2 > 0.01) {
+            const f = (1 - d2 / 26000) * 26;
+            const d = Math.sqrt(d2);
+            tx = (dx / d) * f; ty = (dy / d) * f;
+          }
+        }
+        p.ox += (tx - p.ox) * 0.08;
+        p.oy += (ty - p.oy) * 0.08;
+      }
+
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i], ax = a.x + a.ox, ay = a.y + a.oy;
+        for (let j = i + 1; j < pts.length; j++) {
+          const b = pts[j], bx = b.x + b.ox, by = b.y + b.oy;
+          const dx = ax - bx, dy = ay - by, d2 = dx * dx + dy * dy;
+          if (d2 < 16000) {
+            const al = (1 - d2 / 16000) * 0.16;
+            ctx.strokeStyle = 'rgba(20,18,16,' + al.toFixed(3) + ')';
+            ctx.lineWidth = 0.7;
+            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+          }
+        }
+      }
+
+      // Mostly charcoal particles; roughly one in seven carries a brand accent
+      // so the field reads as Powertek without turning into a neon field.
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i], x = p.x + p.ox, y = p.y + p.oy;
+        const tw = 0.4 + 0.3 * Math.sin(time * 0.9 + i);
+        const rgb = i % 11 === 0 ? '215,70,39' : i % 17 === 0 ? '237,174,33' : '32,28,25';
+        ctx.fillStyle = 'rgba(' + rgb + ',' + tw.toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
+      }
+
+      this.raf = requestAnimationFrame(draw);
+    };
+    this.raf = requestAnimationFrame(draw);
+  }
+
+  toggle(bag, key) {
+    this.setState((s) => {
+      const next = Object.assign({}, s[bag]);
+      next[key] = !next[key];
+      return { [bag]: next };
+    });
+  }
+
+  onTilt = (e) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = 'perspective(900px) rotateY(' + (px * 7).toFixed(2) + 'deg) rotateX(' + (-py * 7).toFixed(2) + 'deg) translateY(-5px)';
+  };
+  onTiltLeave = (e) => {
+    e.currentTarget.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateY(0)';
+  };
+
+  onMagnet = (e) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = 'translate(' + (px * 11).toFixed(1) + 'px,' + (py * 7).toFixed(1) + 'px)';
+  };
+  onMagnetLeave = (e) => { e.currentTarget.style.transform = 'translate(0,0)'; };
+
+  submit = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (this.state.sending || this.state.sent) return;
+    this.setState({ sending: true });
+    this.sendTimer = setTimeout(() => this.setState({ sending: false, sent: true }), 1300);
+  };
+
+  renderVals() {
+    const v = {
+      loader: this.props.showLoader !== false,
+      canvasRef: this.canvasRef,
+      statsRef: this.statsRef,
+      cy: this.state.cy,
+      cp: this.state.cp,
+      onTilt: this.onTilt,
+      onTiltLeave: this.onTiltLeave,
+      onMagnet: this.onMagnet,
+      onMagnetLeave: this.onMagnetLeave,
+      submit: this.submit,
+      sending: this.state.sending,
+      sent: this.state.sent,
+      idle: !this.state.sending && !this.state.sent
+    };
+    // Projects grid. Each card carries its own open handler plus a scroll-driven
+    // reveal window offset by index, which is what produces the staggered
+    // "assembling" cascade as the grid comes into view.
+    v.projects = PROJECT_DATA.map((p, i) => {
+      const hero = p.images.length ? p.images[0].src : '';
+      return {
+        num: pad2(i + 1),
+        name: p.name,
+        type: p.type,
+        dateLabel: p.completed.toUpperCase(),
+        aria: 'Open project dossier: ' + p.name,
+        hero: hero,
+        noHero: !hero,
+        r0: 2 + (i % 3) * 3,
+        r1: 24 + (i % 3) * 5,
+        open: () => this.openProject(i),
+        keyOpen: (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.openProject(i); }
+        }
+      };
+    });
+    v.m = this.state.openIndex == null ? null : this.projectView(this.state.openIndex);
+    v.closeModal = this.closeModal;
+    v.prevProject = this.prevProject;
+    v.nextProject = this.nextProject;
+    v.stopProp = this.stopProp;
+    v.trapKeys = this.trapKeys;
+    v.modalRef = this.modalRef;
+    for (let i = 1; i <= 8; i++) {
+      v['s' + i] = !!this.state.svc['s' + i];
+      v['ns' + i] = !this.state.svc['s' + i];
+      v['ts' + i] = () => this.toggle('svc', 's' + i);
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>
