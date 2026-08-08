@@ -204,6 +204,133 @@ input,textarea,button{font-family:inherit}
   .pt-card:hover .pt-card-spark,.pt-card:hover .pt-ph-pulse,.pt-modal-fig-ph .pt-ph-pulse{animation:none}
   .pt-card-wrap,.pt-modal,.pt-modal-backdrop,.pt-modal-head,.pt-modal-eyebrow,.pt-modal-title,.pt-modal-sub,.pt-modal-scale,.pt-modal-completed,.pt-modal-gallery,.pt-modal-b1,.pt-modal-b2,.pt-modal-b3,.pt-scope-item,.pt-modal-nav,.pt-daterange{animation-duration:.01ms!important;animation-delay:0ms!important}
 }
+
+/* ===========================================================================
+   HERO ENERGY WHEEL  (.ptw-*)
+   A real dimensional object built from assets/powertek-mark.png rather than a
+   rotated picture of it: one crisp front face plus fourteen copies pushed back
+   along Z and progressively darkened, so the body of the extrusion is the mark's
+   own red-orange and yellow going deep — never a flat grey skirt. Perspective is
+   on the hit target, so the rear layers foreshorten correctly.
+
+   Three nested elements own three different transforms and never share one, so
+   the lift, the parallax and the rotation cannot fight:
+     .ptw-lift  scale        — CSS, driven by the .ptw-live class
+     .ptw-tilt  rotateX/Y    — JS parallax
+     .ptw-spin  rotateZ      — JS, the single source of truth for orientation
+   The dial ring is deliberately static: it is the fixed reference that makes
+   the rotation legible, the way a dial does on real switchgear.
+
+   z-index:-1 puts the whole assembly above the hero canvas (-2) and the
+   gradient wash, and always behind the hero copy. It is laid out inside the
+   hero's own 1360px container, so it tracks the text column rather than the
+   viewport, and it never reaches the typography (see the width tiers below).
+
+   Consequence of sitting behind the copy: the h1's lines are display:block, so
+   their full-width line boxes cover this area and would swallow every pointer
+   event before it could reach a hit target here. So the whole assembly is
+   pointer-events:none and the cursor test is done arithmetically in JS against
+   the wheel's own circle — which also means the wheel intercepts no clicks and
+   no text selection anywhere in the hero. `.ptw-live` is the class the JS sets
+   while the cursor is inside that circle; it stands in for :hover throughout.
+=========================================================================== */
+@keyframes ptwIn{from{opacity:0;transform:scale(.84) rotate(-16deg)}to{opacity:1;transform:none}}
+@keyframes ptwCharge{0%{opacity:.85;transform:none}18%{opacity:1;transform:scale(1.09)}100%{opacity:.85;transform:none}}
+
+.ptw{
+  --ptw-size:clamp(320px,27vw,440px);
+  --ptw-z:calc(var(--ptw-size)/95);    /* one extrusion step, ~4.6px at full size */
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:var(--ptw-size);z-index:-1;pointer-events:none;
+}
+.ptw-in{position:relative;isolation:isolate;width:100%;aspect-ratio:1/1;animation:ptwIn 1.6s cubic-bezier(.2,.9,.2,1) 1.05s both}
+
+/* Carries the perspective. Note it is not a hit target — see the block comment
+   above — so it has no pointer-events or cursor of its own. */
+/* A fairly short perspective distance on purpose: most of what makes the object
+   read as solid is not the tilt (which only shifts the stack a few px sideways)
+   but the perspective taper, which shows the receding body as a rim on every
+   silhouette edge at once. 900px is close enough to make that rim legible
+   without visibly distorting the front face. */
+.ptw-stage{position:absolute;inset:0;z-index:3;perspective:900px;perspective-origin:50% 44%}
+.ptw-lift{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.22,1,.36,1)}
+.ptw.ptw-live .ptw-lift{transform:scale(1.04)}
+.ptw-tilt,.ptw-spin{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+
+/* The 10%/80% box keeps the mark's swept circle (max radius 0.531 x its own
+   width, measured off the asset) clear of the tick ring at every rotation.
+   width/height are explicit rather than relying on `inset`: an <img> is a
+   replaced element, so with width:auto it would take its intrinsic 1006px and
+   ignore `right`/`bottom` entirely. */
+.ptw-face,.ptw-layer{position:absolute;left:10%;top:10%;width:80%;height:80%;object-fit:contain;display:block;pointer-events:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;backface-visibility:hidden;transition:transform .8s cubic-bezier(.22,1,.36,1),filter .8s cubic-bezier(.22,1,.36,1)}
+/* The body of the extrusion. Fourteen steps rather than a handful: the rim the
+   perspective reveals is only ~2px per step, so at this count the steps read as
+   one continuous flank (with a faint lamination, which suits an electrical
+   object) instead of a stack of discs. The brightness ramp bottoms out at .70,
+   which is where the mark's #D74627 lands almost exactly on the brand's own
+   darkest red, #9C2F17 — so the flank recedes into Powertek red and Powertek
+   deep yellow rather than into mud, and the two colours stay distinct all the way
+   to the back. saturate() climbs slightly to hold chroma as the layers darken. */
+.ptw-d1{transform:translateZ(calc(var(--ptw-z) * -1));filter:brightness(.979) saturate(1.01)}
+.ptw-d2{transform:translateZ(calc(var(--ptw-z) * -2));filter:brightness(.957) saturate(1.02)}
+.ptw-d3{transform:translateZ(calc(var(--ptw-z) * -3));filter:brightness(.936) saturate(1.03)}
+.ptw-d4{transform:translateZ(calc(var(--ptw-z) * -4));filter:brightness(.914) saturate(1.04)}
+.ptw-d5{transform:translateZ(calc(var(--ptw-z) * -5));filter:brightness(.893) saturate(1.05)}
+.ptw-d6{transform:translateZ(calc(var(--ptw-z) * -6));filter:brightness(.871) saturate(1.06)}
+.ptw-d7{transform:translateZ(calc(var(--ptw-z) * -7));filter:brightness(.850) saturate(1.07)}
+.ptw-d8{transform:translateZ(calc(var(--ptw-z) * -8));filter:brightness(.829) saturate(1.08)}
+.ptw-d9{transform:translateZ(calc(var(--ptw-z) * -9));filter:brightness(.807) saturate(1.09)}
+.ptw-d10{transform:translateZ(calc(var(--ptw-z) * -10));filter:brightness(.786) saturate(1.10)}
+.ptw-d11{transform:translateZ(calc(var(--ptw-z) * -11));filter:brightness(.764) saturate(1.11)}
+.ptw-d12{transform:translateZ(calc(var(--ptw-z) * -12));filter:brightness(.743) saturate(1.12)}
+.ptw-d13{transform:translateZ(calc(var(--ptw-z) * -13));filter:brightness(.721) saturate(1.13)}
+.ptw-d14{transform:translateZ(calc(var(--ptw-z) * -14));filter:brightness(.700) saturate(1.14)}
+/* the whole "stronger lighting" response is simply a deeper extrusion — every
+   layer transitions its own translateZ off this one variable, so nothing else
+   has to move and no second transform is involved */
+.ptw.ptw-live{--ptw-z:calc(var(--ptw-size)/78)}
+
+.ptw-aura{position:absolute;inset:-8%;z-index:1;border-radius:50%;pointer-events:none;opacity:.85;background:radial-gradient(circle at 50% 44%,rgba(237,174,33,.13),rgba(215,70,39,.085) 44%,rgba(215,70,39,0) 70%);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.ptw.ptw-live .ptw-aura{opacity:1;transform:scale(1.05)}
+.ptw.ptw-charged .ptw-aura{animation:ptwCharge 2.5s cubic-bezier(.22,1,.36,1) both}
+
+.ptw-dial{position:absolute;inset:0;z-index:2;width:100%;height:100%;display:block;pointer-events:none}
+.ptw-shadow{position:absolute;z-index:0;left:16%;right:16%;bottom:-3%;height:7%;border-radius:50%;pointer-events:none;opacity:.75;background:radial-gradient(closest-side,rgba(76,30,12,.15),rgba(76,30,12,0));transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.ptw.ptw-live .ptw-shadow{opacity:1;transform:scaleX(1.06)}
+
+.ptw-meta{position:absolute;z-index:4;left:9%;right:9%;bottom:-8%;display:flex;align-items:center;gap:12px;pointer-events:none;font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#7A736B}
+.ptw-swap{position:relative;flex:none;white-space:nowrap}
+.ptw-swap-a{transition:opacity .5s cubic-bezier(.22,1,.36,1)}
+.ptw-swap-b{position:absolute;left:0;top:0;opacity:0;color:#B3381D;transition:opacity .5s cubic-bezier(.22,1,.36,1)}
+.ptw.ptw-live .ptw-swap-a{opacity:0}
+.ptw.ptw-live .ptw-swap-b{opacity:1}
+.ptw-rule{flex:1;min-width:14px;height:1px;background:linear-gradient(90deg,rgba(20,18,16,.16),rgba(215,70,39,.28))}
+.ptw-read{flex:none;font-variant-numeric:tabular-nums;color:#5F584F;transition:color .5s cubic-bezier(.22,1,.36,1)}
+.ptw.ptw-live .ptw-read{color:#B3381D}
+
+/* Tablet: same right-side composition, smaller object. */
+@media (max-width:1180px){
+  .ptw{--ptw-size:clamp(240px,26vw,300px);right:0}
+}
+/* Below 900px the text column is too wide to share the row, so the wheel drops
+   into normal flow underneath the hero copy — it is already the last child of
+   the hero container, so no reordering is needed. */
+@media (max-width:900px){
+  .ptw{position:static;right:auto;top:auto;transform:none;--ptw-size:clamp(220px,52vw,300px);margin:clamp(56px,9vw,84px) auto 0}
+  .ptw-meta{bottom:-10%}
+}
+/* Touch: no cursor to follow, so the prompt to move one would be a lie. The JS
+   ignores non-mouse pointers, so the wheel simply keeps auto-rotating. */
+@media (hover:none){
+  .ptw-swap-b{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .ptw-in{animation:none}
+  .ptw.ptw-live{--ptw-z:calc(var(--ptw-size)/95)}
+  .ptw.ptw-live .ptw-lift,.ptw.ptw-live .ptw-aura,.ptw.ptw-live .ptw-shadow{transform:none}
+  .ptw-lift,.ptw-tilt,.ptw-spin,.ptw-face,.ptw-layer,.ptw-aura,.ptw-shadow,.ptw-swap-a,.ptw-swap-b,.ptw-read{transition:none!important;animation:none!important}
+  .ptw-swap-b{display:none}
+}
 </style>
 </helmet>
 
@@ -227,7 +354,10 @@ input,textarea,button{font-family:inherit}
 
 <header style="position:fixed;top:2px;left:0;right:0;z-index:70;background:rgba(255,255,255,.8);backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid rgba(20,18,16,.09);">
   <div style="max-width:1360px;margin:0 auto;padding:0 40px;height:clamp(76px,7vw,92px);display:flex;align-items:center;justify-content:space-between;gap:32px;">
-    <a href="#home" style="display:flex;align-items:center;gap:16px;color:#141414;min-width:0;">
+    <!-- The anchor keeps doing exactly what it did (smooth-scroll to #home);
+         onBrandClick only adds the three-revolution flourish on the hero wheel
+         on top of it — it never preventDefaults or navigates. -->
+    <a href="#home" onClick="{{ onBrandClick }}" style="display:flex;align-items:center;gap:16px;color:#141414;min-width:0;">
       <img class="pt-brand-mark" src="assets/powertek-mark.png" alt="Powertek logo" style="height:clamp(38px,4.6vw,50px);width:auto;display:block;flex:none;" />
       <span style="display:flex;flex-direction:column;line-height:1;min-width:0;">
         <span class="pt-brand-name" style="font:900 clamp(19px,2vw,23px)/1 Satoshi,Inter,sans-serif;letter-spacing:.15em;">POWERTEK</span>
@@ -248,7 +378,9 @@ input,textarea,button{font-family:inherit}
   <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block;"></canvas>
   <div style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 80% at 18% 8%,rgba(215,70,39,.1),transparent 60%),radial-gradient(90% 70% at 88% 24%,rgba(215,70,39,.06),transparent 62%),linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.08) 42%,#FFFFFF 96%);"></div>
 
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;width:100%;">
+  <!-- position:relative makes this container the positioning context for the
+       energy wheel at the end of it; nothing else about the hero layout changes. -->
+  <div style="max-width:1360px;margin:0 auto;padding:0 40px;width:100%;position:relative;">
     <div style="display:flex;align-items:center;gap:16px;animation:riseSm .8s cubic-bezier(.2,.9,.2,1) .15s both;">
       <span style="width:34px;height:1px;background:linear-gradient(90deg,transparent,#D74627);"></span>
       <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">BENGALURU · EST. 1995 · CLASS I LICENSED</span>
@@ -268,6 +400,69 @@ input,textarea,button{font-family:inherit}
         Contact Us
         <span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>
       </a>
+    </div>
+
+    <!-- ===================== hero energy wheel =====================
+         Decorative, hence aria-hidden: it is the same mark already announced by
+         the navbar lockup and carries no information of its own. The whole
+         subtree is pointer-events:none — the cursor test lives in JS, see the
+         stylesheet — so z-index alone decides what paints in front here.
+         The fourteen .ptw-d* copies are the extrusion body, .ptw-face is the crisp
+         front face — same asset for all fifteen, so the browser decodes it once. -->
+    <div class="ptw" ref="{{ wheelRef }}" aria-hidden="true">
+      <div class="ptw-in">
+
+        <div class="ptw-stage">
+          <div class="ptw-lift">
+            <div class="ptw-tilt" ref="{{ wheelTiltRef }}">
+              <div class="ptw-spin" ref="{{ wheelSpinRef }}">
+                <img class="ptw-layer ptw-d14" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d13" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d12" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d11" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d10" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d9" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d8" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d7" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d6" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d5" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d4" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d3" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d2" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-layer ptw-d1" src="assets/powertek-mark.png" alt="" />
+                <img class="ptw-face" src="assets/powertek-mark.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ptw-aura"></div>
+
+        <!-- Static dial. The 72 tick marks are a single circle whose stroke is
+             dashed against pathLength="720", so the spacing is exact and there
+             are no 72 individual nodes to lay out. -->
+        <svg class="ptw-dial" viewBox="0 0 400 400" focusable="false">
+          <circle cx="200" cy="200" r="197" fill="none" stroke="rgba(20,18,16,.09)" stroke-width="1" />
+          <circle cx="200" cy="200" r="188" fill="none" stroke="rgba(20,18,16,.17)" stroke-width="7" pathLength="720" stroke-dasharray="1.1 8.9" />
+          <circle cx="200" cy="200" r="192.5" fill="none" stroke="#D74627" stroke-width="1.6" stroke-linecap="round" pathLength="360" stroke-dasharray="54 306" stroke-dashoffset="-292" opacity=".8" />
+          <circle cx="200" cy="200" r="192.5" fill="none" stroke="#EDAE21" stroke-width="2.2" stroke-linecap="round" pathLength="360" stroke-dasharray="30 330" stroke-dashoffset="-118" />
+          <g stroke="#D74627" stroke-width="1.6" stroke-linecap="round" opacity=".85">
+            <path d="M200 5 L200 25" /><path d="M395 200 L375 200" /><path d="M200 395 L200 375" /><path d="M5 200 L25 200" />
+          </g>
+        </svg>
+
+        <div class="ptw-shadow"></div>
+
+        <div class="ptw-meta">
+          <span class="ptw-swap">
+            <span class="ptw-swap-a">POWERTEK &#183; ENERGY WHEEL</span>
+            <span class="ptw-swap-b">MOVE CURSOR TO ROTATE</span>
+          </span>
+          <span class="ptw-rule"></span>
+          <span class="ptw-read" ref="{{ wheelReadRef }}">000&#176;</span>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -1289,9 +1484,14 @@ class Component extends DCLogic {
   canvasRef = React.createRef();
   statsRef = React.createRef();
   modalRef = React.createRef();
+  wheelRef = React.createRef();
+  wheelTiltRef = React.createRef();
+  wheelSpinRef = React.createRef();
+  wheelReadRef = React.createRef();
 
   componentDidMount() {
     this.startCanvas();
+    this.startWheel();
     this.watchStats();
     document.addEventListener('keydown', this.onGlobalKey);
   }
@@ -1320,7 +1520,12 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     cancelAnimationFrame(this.raf);
+    cancelAnimationFrame(this.wheelRaf);
     window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('resize', this.wheelInvalidate);
+    document.removeEventListener('pointermove', this.onWheelPointer);
+    document.documentElement.removeEventListener('pointerleave', this.onWheelLeave);
+    clearTimeout(this.wheelGlowTimer);
     if (this.cv) {
       this.cv.removeEventListener('pointermove', this.onPointer);
       this.cv.removeEventListener('pointerleave', this.onLeave);
@@ -1592,6 +1797,228 @@ class Component extends DCLogic {
     this.raf = requestAnimationFrame(draw);
   }
 
+  /* ---------------- hero energy wheel ----------------
+     One number, this.wheel.angle, is the whole truth about the wheel's
+     orientation, and one rAF loop is the only thing that ever writes the
+     rotation. Every mode just decides how the angle changes this frame:
+
+       auto   linear +30 deg/s (12 s per revolution) — no easing, no drift
+       mouse  the angular delta the cursor swept since the previous sample
+       spin   a 1080 deg ramp driven by spinEase(), triggered by the navbar logo
+
+     Because nothing ever assigns an absolute starting angle, every handover is
+     seamless by construction: leaving the wheel mid-turn resumes auto rotation
+     from wherever it happens to be, and a celebration spin lands three exact
+     revolutions on from wherever it started.
+
+     No state lives in React here — a setState per frame would re-render the
+     whole page 60 times a second — so the loop writes transforms straight onto
+     the two ref'd elements instead. */
+
+  startWheel() {
+    if (!this.wheelRef.current) return;
+    const mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.wheelReduce = !!(mq && mq.matches);
+    this.wheel = {
+      angle: -9,      // resting orientation; also the static reduced-motion pose
+      mode: 'auto',   // 'auto' | 'mouse' | 'spin'
+      hover: false,
+      pending: 0,     // cursor delta not yet applied, drained over a few frames
+      prev: null,     // previous cursor angle, radians
+      rect: null,     // cached while the cursor is on the wheel
+      // Resting attitude. A coaxial extrusion viewed dead-on hides behind its own
+      // front face, so the object is always held a few degrees off axis: that is
+      // what makes the deep red and deep yellow flank visible at rest instead of
+      // only while the cursor is on it. The parallax modulates around this pose.
+      baseX: 3.5, baseY: -6.5,
+      tiltX: 3.5, tiltY: -6.5, tgX: 3.5, tgY: -6.5,
+      spinFrom: 0, spinAt: 0, queued: 0,
+      last: 0
+    };
+    this.paintWheel();
+    if (this.wheelReduce) return;   // static mark, no loop, no pointer response
+    window.addEventListener('resize', this.wheelInvalidate);
+    // One document-level listener rather than handlers on the wheel: the wheel
+    // sits behind the hero copy, whose full-width line boxes would take the
+    // pointer first, so whether the cursor is "on" the wheel is decided
+    // arithmetically instead of by hit testing.
+    document.addEventListener('pointermove', this.onWheelPointer, { passive: true });
+    document.documentElement.addEventListener('pointerleave', this.onWheelLeave, { passive: true });
+    this.wheelRaf = requestAnimationFrame(this.wheelFrame);
+  }
+
+  // The circle is cached in *page* coordinates, so scrolling — which moves the
+  // wheel on screen every frame — never invalidates it. Only a resize can.
+  // Measured off .ptw, which carries no animation, rather than .ptw-in, whose
+  // entrance keyframes would inflate the box while they run.
+  wheelInvalidate = () => { if (this.wheel) this.wheel.rect = null; };
+
+  wheelRect() {
+    const w = this.wheel;
+    if (!w.rect) {
+      const el = this.wheelRef.current;
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      w.rect = {
+        cx: r.left + window.scrollX + r.width / 2,
+        cy: r.top + window.scrollY + r.height / 2,
+        rad: r.width / 2
+      };
+    }
+    return w.rect;
+  }
+
+  paintWheel() {
+    const w = this.wheel;
+    const spin = this.wheelSpinRef.current;
+    const tilt = this.wheelTiltRef.current;
+    const read = this.wheelReadRef.current;
+    if (spin) spin.style.transform = 'rotateZ(' + w.angle.toFixed(2) + 'deg)';
+    if (tilt) tilt.style.transform = 'rotateX(' + w.tiltX.toFixed(2) + 'deg) rotateY(' + w.tiltY.toFixed(2) + 'deg)';
+    if (read) {
+      const d = Math.round(((w.angle % 360) + 360) % 360) % 360;
+      read.textContent = ('00' + d).slice(-3) + '°';
+    }
+  }
+
+  wheelFrame = (now) => {
+    const w = this.wheel;
+    const dt = w.last ? Math.min(0.05, (now - w.last) / 1000) : 0;
+    w.last = now;
+
+    if (w.mode === 'spin') {
+      // Clamped at both ends: a frame timestamp can predate the click that armed
+      // the spin (both are performance.now(), but the click is handled first in
+      // the same turn), and a negative t would run the easing off its domain.
+      const t = Math.min(1, Math.max(0, (now - w.spinAt) / 2500));
+      w.angle = w.spinFrom + 1080 * this.spinEase(t);
+      if (t >= 1) {
+        w.angle = w.spinFrom + 1080;            // land on exactly three turns
+        if (w.queued > 0) { w.queued--; this.armSpin(now); }
+        else w.mode = w.hover ? 'mouse' : 'auto';
+      }
+    } else if (w.mode === 'mouse') {
+      // Drain the swept delta: 1:1 with the cursor, smoothed over ~4 frames so a
+      // jittery mouse does not stutter the object. The remainder is always fully
+      // applied and nothing is ever added, so the wheel stops when the cursor
+      // does — this is damping, not free-running inertia.
+      const step = w.pending * 0.42;
+      w.angle += step;
+      w.pending -= step;
+      if (Math.abs(w.pending) < 0.002) w.pending = 0;
+    } else {
+      w.angle += 30 * dt;
+      w.pending = 0;
+      if (w.angle > 36000 || w.angle < -36000) w.angle = w.angle % 360;
+    }
+
+    w.tiltX += (w.tgX - w.tiltX) * 0.09;
+    w.tiltY += (w.tgY - w.tiltY) * 0.09;
+
+    this.paintWheel();
+    this.wheelRaf = requestAnimationFrame(this.wheelFrame);
+  };
+
+  // Velocity profile for the celebration spin: a linear wind-up over the first
+  // 28% of the duration, then a quadratic settle to exactly zero. Integrated and
+  // normalised so f(0)=0 and f(1)=1, which is what guarantees the wheel lands on
+  // three revolutions precisely rather than overshooting and easing back.
+  spinEase(t) {
+    const a = 0.28, k = a / 2 + (1 - a) / 3;
+    if (t < a) return (t * t) / (2 * a * k);
+    const u = (1 - t) / (1 - a);
+    return (a / 2 + ((1 - a) / 3) * (1 - u * u * u)) / k;
+  }
+
+  armSpin(now) {
+    const w = this.wheel;
+    w.mode = 'spin';
+    w.spinFrom = w.angle;
+    w.spinAt = now;
+    w.pending = 0;
+  }
+
+  onBrandClick = () => {
+    const w = this.wheel;
+    if (!w || this.wheelReduce) return;
+    // Already spinning: remember at most one repeat rather than restarting the
+    // ramp mid-flight. Clicks cannot stack, and each honoured click still turns
+    // the wheel exactly three times.
+    if (w.mode === 'spin') { w.queued = 1; return; }
+    this.armSpin(performance.now());
+    this.wheelGlow();
+  };
+
+  wheelGlow() {
+    const el = this.wheelRef.current;
+    if (!el) return;
+    el.classList.remove('ptw-charged');
+    void el.offsetWidth;                    // reflow, so the animation restarts
+    el.classList.add('ptw-charged');
+    clearTimeout(this.wheelGlowTimer);
+    this.wheelGlowTimer = setTimeout(() => {
+      if (this.wheelRef.current) this.wheelRef.current.classList.remove('ptw-charged');
+    }, 2600);
+  }
+
+  onWheelPointer = (e) => {
+    const w = this.wheel;
+    // Touch and pen come through the same event but have no cursor to follow, so
+    // they are ignored outright and those devices just keep the auto rotation.
+    if (!w || this.wheelReduce || (e.pointerType && e.pointerType !== 'mouse')) return;
+    const r = this.wheelRect();
+    if (!r) return;
+
+    const dx = e.pageX - r.cx;
+    const dy = e.pageY - r.cy;
+    const d2 = dx * dx + dy * dy;
+
+    if (d2 > r.rad * r.rad) { if (w.hover) this.onWheelLeave(); return; }
+
+    if (!w.hover) {
+      w.hover = true;
+      w.prev = null;
+      w.pending = 0;
+      if (w.mode !== 'spin') w.mode = 'mouse';
+      if (this.wheelRef.current) this.wheelRef.current.classList.add('ptw-live');
+    }
+
+    // Near the axis the angle is numerically meaningless, so drop the sample and
+    // re-seed on the way out rather than feeding noise into the rotation.
+    const dead = r.rad * 0.1;
+    if (d2 < dead * dead) {
+      w.prev = null;
+    } else {
+      const ang = Math.atan2(dy, dx);
+      if (w.prev != null) {
+        let d = ang - w.prev;
+        // Normalise across the +-180 seam so crossing it cannot jump the wheel.
+        if (d > Math.PI) d -= Math.PI * 2;
+        else if (d < -Math.PI) d += Math.PI * 2;
+        if (w.mode === 'mouse') w.pending += d * 180 / Math.PI;
+      }
+      w.prev = ang;
+    }
+
+    const px = Math.max(-1, Math.min(1, dx / r.rad));
+    const py = Math.max(-1, Math.min(1, dy / r.rad));
+    w.tgX = w.baseX - py * 5;
+    w.tgY = w.baseY + px * 7;
+  };
+
+  onWheelLeave = () => {
+    const w = this.wheel;
+    if (!w || !w.hover) return;
+    w.hover = false;
+    w.prev = null;
+    w.pending = 0;
+    w.tgX = w.baseX;
+    w.tgY = w.baseY;
+    // Keeps the current angle — auto rotation just picks up from here.
+    if (w.mode === 'mouse') w.mode = 'auto';
+    if (this.wheelRef.current) this.wheelRef.current.classList.remove('ptw-live');
+  };
+
   toggle(bag, key) {
     this.setState((s) => {
       const next = Object.assign({}, s[bag]);
@@ -1638,6 +2065,11 @@ class Component extends DCLogic {
       onTiltLeave: this.onTiltLeave,
       onMagnet: this.onMagnet,
       onMagnetLeave: this.onMagnetLeave,
+      wheelRef: this.wheelRef,
+      wheelTiltRef: this.wheelTiltRef,
+      wheelSpinRef: this.wheelSpinRef,
+      wheelReadRef: this.wheelReadRef,
+      onBrandClick: this.onBrandClick,
       submit: this.submit,
       sending: this.state.sending,
       sent: this.state.sent,
