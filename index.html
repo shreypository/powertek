@@ -475,8 +475,20 @@ input,textarea,button{font-family:inherit}
          the 11 kV span). Intrinsic sizing keeps the two ratios locked, so the drawing
          is never cropped; `meet` makes letterboxing, not clipping, the failure mode if
          an ancestor ever constrains the height. The viewBox gains 16 units of padding
-         top and bottom so no linework touches the frame edge. -->
-    <svg viewBox="0 -16 1440 296" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;height:auto;aspect-ratio:1440/296;">
+         top and bottom so no linework touches the frame edge.
+
+         The viewBox was widened from `0 -16 1440 296` to make room for the source
+         (power station) at the left and the end consumers at the right: 198 units
+         of new space before x=0 and 220 after x=1440. Every existing coordinate,
+         colour and animation value is unchanged — the drawing is fitted to the
+         viewport width, so a wider viewBox simply renders the whole diagram at
+         ~78% of its former size rather than moving anything.
+         The height grew by the same ratio (296 -> 382) purely so the aspect ratio
+         holds: 1858/382 = 4.864 against the old 1440/296 = 4.865, which keeps the
+         rendered strip the same height and therefore leaves the hero's vertical
+         spacing exactly where it was. The extra height is real drawing space, and
+         the station's lattice tower and the apartment tower use it. -->
+    <svg viewBox="-198 -61 1858 382" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;height:auto;aspect-ratio:1858/382;">
       <defs>
         <linearGradient id="pw-wire" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0" stop-color="#C0B8B0" stop-opacity=".5" /><stop offset=".5" stop-color="#D74627" stop-opacity=".85" /><stop offset="1" stop-color="#C0B8B0" stop-opacity=".5" />
@@ -486,8 +498,84 @@ input,textarea,button{font-family:inherit}
         </filter>
       </defs>
 
-      <line x1="0" y1="182" x2="1440" y2="182" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="1 7" />
+      <line x1="-198" y1="182" x2="1660" y2="182" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="1 7" />
       <text x="16" y="174" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.2em;fill:#625B53;">GROUND LEVEL</text>
+
+      <!-- ================= SOURCE: power station =================
+           Reads left to right as a real receiving station: control building ->
+           incoming termination -> power transformer -> circuit breaker -> lattice
+           takeoff tower -> out onto the overhead conductors.
+
+           Everything is drawn in the language the rest of the diagram already
+           uses and nothing else: #C0B8B0 steelwork at 1.2, white plant boxes with
+           a rgba(20,18,16,.28) edge, #D74627 for anything live, and the same 2.4r
+           insulator dots at .55 the line poles use. The one new texture is the
+           transformer's radiator fins, kept at rgba(20,18,16,.16)/1 so it reads as
+           shading rather than as another set of structural lines.
+
+           The whole station hangs off one straight busbar at y=74. That busbar is
+           not drawn as structure — it IS the energised route path below, so the
+           existing red and yellow pulses enter at the incoming termination, run
+           the length of the station and leave along the conductors. The tower's
+           crossarms land on x=-20, exactly where the two existing conductors
+           already begin, so the lines leave the steelwork without a single
+           existing conductor coordinate changing. -->
+
+      <!-- control building -->
+      <rect x="-184" y="132" width="44" height="50" rx="2" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+      <g fill="none" stroke="#C0B8B0" stroke-width="1.2" stroke-linecap="round">
+        <path d="M-187 132 L-137 132" />
+      </g>
+      <g fill="none" stroke="rgba(20,18,16,.28)" stroke-width="1">
+        <rect x="-178" y="156" width="12" height="26" />
+        <rect x="-159" y="146" width="16" height="18" />
+        <path d="M-155 148 L-155 162 M-151 148 L-151 162 M-147 148 L-147 162" stroke="rgba(20,18,16,.16)" />
+      </g>
+      <!-- the door mark from the reference, the one place the station carries a
+           solid red rather than a stroke -->
+      <path d="M-170 160 L-175 169.5 L-172 169.5 L-173.5 176 L-168.5 166.5 L-171.5 166.5 Z" fill="#D74627" />
+
+      <g fill="none" stroke="#C0B8B0" stroke-width="1.2" stroke-linecap="round">
+        <!-- incoming termination -->
+        <path d="M-132 182 L-132 62 M-140 74 L-124 74" />
+        <!-- transformer bushings and the breaker column, both tapping the busbar -->
+        <path d="M-104 120 L-104 74 M-88 120 L-88 74 M-72 120 L-72 74" />
+        <path d="M-58 152 L-58 74" />
+        <!-- lattice takeoff tower: tapered legs, horizontal ties and X-bracing,
+             the reference's steel structure reduced to line work -->
+        <path d="M-46 182 L-38 38 M-22 182 L-30 38 M-38 38 L-30 38" />
+        <path d="M-44.2 150 L-23.8 150 M-42.3 116 L-25.7 116 M-40.9 90 L-27.1 90 M-38.6 48 L-29.4 48" stroke-width="1" />
+        <path d="M-46 182 L-23.8 150 M-22 182 L-44.2 150 M-44.2 150 L-25.7 116 M-23.8 150 L-42.3 116 M-42.3 116 L-27.1 90 M-25.7 116 L-40.9 90 M-40.9 90 L-29.4 48 M-27.1 90 L-38.6 48" stroke-width="1" />
+        <!-- crossarms, overhanging right so the conductors land outboard of the leg -->
+        <path d="M-42 66 L-8 66 M-42 82 L-8 82" />
+      </g>
+
+      <!-- power transformer: finned tank, conservator drum and three bushings on
+           stacked insulator sheds, the reference's centrepiece. Sheds are sized to
+           leave clear air between adjacent bushings — run them any wider and the
+           three stacks merge into one ladder across the whole tank. -->
+      <rect x="-124" y="120" width="56" height="62" rx="4" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+      <rect x="-124" y="110" width="16" height="9" rx="4.5" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+      <g fill="none" stroke="rgba(20,18,16,.16)" stroke-width="1">
+        <path d="M-119 130 L-119 174 M-113 130 L-113 174 M-107 130 L-107 174 M-101 130 L-101 174 M-95 130 L-95 174 M-89 130 L-89 174 M-83 130 L-83 174 M-77 130 L-77 174 M-71 130 L-71 174" />
+      </g>
+      <g fill="none" stroke="#D74627" stroke-width="1.2">
+        <path d="M-108.5 108 L-99.5 108 M-108 98 L-100 98 M-107.5 88 L-100.5 88" />
+        <path d="M-92.5 108 L-83.5 108 M-92 98 L-84 98 M-91.5 88 L-84.5 88" />
+        <path d="M-76.5 108 L-67.5 108 M-76 98 L-68 98 M-75.5 88 L-68.5 88" />
+      </g>
+
+      <!-- circuit breaker -->
+      <rect x="-64" y="152" width="12" height="30" rx="2" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+      <rect x="-63" y="118" width="10" height="13" rx="1.5" fill="#FFFFFF" stroke="#D74627" stroke-width="1.2" />
+      <g fill="none" stroke="#D74627" stroke-width="1.2">
+        <path d="M-63 142 L-53 142 M-63 104 L-53 104" />
+      </g>
+
+      <g fill="#D74627" opacity=".55">
+        <circle cx="-132" cy="74" r="2.4" /><circle cx="-88" cy="74" r="2.4" /><circle cx="-58" cy="74" r="2.4" /><circle cx="-20" cy="66" r="2.4" /><circle cx="-20" cy="82" r="2.4" />
+      </g>
+      <text x="-184" y="-2" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.22em;fill:#B3381D;">POWER STATION</text>
 
       <g stroke="#C0B8B0" stroke-width="1.2" fill="none" stroke-linecap="round">
         <path d="M150 182 L150 44 M126 182 L150 150 M174 182 L150 150 M132 96 L168 96 M128 70 L172 70" />
@@ -505,30 +593,37 @@ input,textarea,button{font-family:inherit}
       <g fill="none" stroke="#CFC7BF" stroke-width="1" stroke-dasharray="4 4">
         <path d="M150 30 L370 30" /><path d="M150 24 L150 36" /><path d="M370 24 L370 36" />
       </g>
-      <text x="232" y="22" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.22em;fill:#B3381D;">11 kV OVERHEAD</text>
+      <text x="223" y="22" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.22em;fill:#B3381D;">POWERLINES</text>
 
-      <path id="pw-route" d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#D4CCC4" stroke-width="1.6" pathLength="1000" stroke-dasharray="1000" style="animation:drawIn 2s cubic-bezier(.4,0,.2,1) .5s both;" />
-      <path d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#D74627" stroke-width="2.2" stroke-linecap="round" pathLength="1000" stroke-dasharray="42 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 1.9s infinite;" />
+      <!-- The route is one continuous conductor from source to consumer. It was
+           extended at the head (substation busbar, incoming termination through to
+           the takeoff portal) and at the tail (on past the feeder pillars to the
+           last consumer riser). Nothing between x=-20 and
+           x=1460 moved, and no animation value changed: pathLength stays 1000, so
+           the pulses still cross the whole route in one 5.2s cycle — they simply
+           have a longer journey to make, which is the point. -->
+      <path id="pw-route" d="M-132 74 L-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1630 214" fill="none" stroke="#D4CCC4" stroke-width="1.6" pathLength="1000" stroke-dasharray="1000" style="animation:drawIn 2s cubic-bezier(.4,0,.2,1) .5s both;" />
+      <path d="M-132 74 L-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1630 214" fill="none" stroke="#D74627" stroke-width="2.2" stroke-linecap="round" pathLength="1000" stroke-dasharray="42 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 1.9s infinite;" />
       <!-- Secondary energy. Yellow carries far less contrast than red-orange against
            white, so it needs more mass and full opacity to read as an equal partner:
            2.6 wide vs the red's 2.2, and a longer dash. Offset half a cycle from the
            red pulse so the route reads red -> yellow -> red -> yellow. -->
-      <path d="M-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1460 214" fill="none" stroke="#EDAE21" stroke-width="2.6" stroke-linecap="round" pathLength="1000" stroke-dasharray="30 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 4.5s infinite;" />
+      <path d="M-132 74 L-20 74 Q 65 101 150 74 Q 260 105 370 74 L 500 74 L 540 100 L 1130 100 L 1130 214 L 1630 214" fill="none" stroke="#EDAE21" stroke-width="2.6" stroke-linecap="round" pathLength="1000" stroke-dasharray="30 1000" filter="url(#pw-glow)" style="animation:travel 5.2s linear 4.5s infinite;" />
 
       <g>
         <rect x="540" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
         <g stroke="#D74627" stroke-width="1.2" fill="none"><circle cx="576" cy="100" r="6" /><path d="M584 106 L602 90 M602 90 L602 96 M602 90 L596 90" stroke-linecap="round" /><path d="M614 90 L614 110 M622 90 L622 110 M630 90 L630 110" opacity=".55" /></g>
-        <text x="540" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">11 kV 5-WAY RMU</text>
+        <text x="540" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">RMU</text>
       </g>
       <g>
         <rect x="760" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
         <g stroke="#D74627" stroke-width="1.3" fill="none"><circle cx="806" cy="100" r="12" /><circle cx="822" cy="100" r="12" /></g>
-        <text x="760" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">250 kVA TRANSFORMER</text>
+        <text x="760" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">TRANSFORMER</text>
       </g>
       <g>
         <rect x="980" y="72" width="128" height="56" rx="8" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
         <g stroke="#D74627" stroke-width="1.2" fill="none"><rect x="1000" y="86" width="26" height="28" rx="2" /><rect x="1032" y="86" width="26" height="28" rx="2" /><rect x="1064" y="86" width="26" height="28" rx="2" /></g>
-        <text x="980" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">400A LT KIOSK</text>
+        <text x="980" y="150" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">LT KIOSK</text>
       </g>
 
       <g fill="none" stroke="#C7BFB7" stroke-width="1.4" stroke-linecap="round">
@@ -546,6 +641,68 @@ input,textarea,button{font-family:inherit}
       </g>
       <g fill="#FFFFFF" stroke="rgba(20,18,16,.3)"><rect x="1208" y="250" width="24" height="14" rx="3" /><rect x="1288" y="250" width="24" height="14" rx="3" /><rect x="1368" y="250" width="24" height="14" rx="3" /></g>
       <text x="1150" y="200" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.2em;fill:#B3381D;">HT &amp; LT UNDERGROUND</text>
+
+      <!-- ================= DESTINATION: end consumers =================
+           The underground main used to stop mid-air past the feeder pillars. It
+           now runs on and rises into the buildings it feeds, so the diagram ends
+           on a consumer instead of trailing off the canvas.
+
+           The risers are the existing service-drop idiom reused verbatim — same
+           1.4 structural line in #C7BFB7, same 6/10 dash, same `flow` 1.4s timing,
+           same two-red-one-yellow balance, just running upward out of the ground
+           instead of down into a pillar. The connection points reuse the existing
+           glowPulse keyframe rather than adding another, staggered so they light
+           in sequence as the run reaches them. -->
+      <g fill="none" stroke="#C7BFB7" stroke-width="1.4" stroke-linecap="round">
+        <path d="M1478 214 L1478 182" /><path d="M1554 214 L1554 182" /><path d="M1592 214 L1592 182" /><path d="M1630 214 L1630 182" />
+      </g>
+      <g fill="none" stroke="#D74627" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="6 10" opacity=".8">
+        <path d="M1478 214 L1478 182" style="animation:flow 1.4s linear infinite;" />
+        <path d="M1592 214 L1592 182" style="animation:flow 1.4s linear .5s infinite;" />
+      </g>
+      <g fill="none" stroke="#EDAE21" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="6 10">
+        <path d="M1554 214 L1554 182" style="animation:flow 1.4s linear .25s infinite;" />
+        <path d="M1630 214 L1630 182" style="animation:flow 1.4s linear .75s infinite;" />
+      </g>
+
+      <!-- apartment tower -->
+      <rect x="1432" y="40" width="90" height="142" rx="5" fill="#FFFFFF" stroke="rgba(20,18,16,.28)" />
+      <path d="M1427 40 L1527 40" fill="none" stroke="#C0B8B0" stroke-width="1.2" stroke-linecap="round" />
+      <g fill="rgba(20,18,16,.07)">
+        <rect x="1438" y="50" width="15" height="12" /><rect x="1459" y="50" width="15" height="12" /><rect x="1480" y="50" width="15" height="12" /><rect x="1501" y="50" width="15" height="12" />
+        <rect x="1438" y="72" width="15" height="12" /><rect x="1459" y="72" width="15" height="12" /><rect x="1480" y="72" width="15" height="12" /><rect x="1501" y="72" width="15" height="12" />
+        <rect x="1438" y="94" width="15" height="12" /><rect x="1480" y="94" width="15" height="12" /><rect x="1501" y="94" width="15" height="12" />
+        <rect x="1438" y="116" width="15" height="12" /><rect x="1459" y="116" width="15" height="12" /><rect x="1480" y="116" width="15" height="12" /><rect x="1501" y="116" width="15" height="12" />
+        <rect x="1438" y="138" width="15" height="12" /><rect x="1459" y="138" width="15" height="12" /><rect x="1480" y="138" width="15" height="12" />
+      </g>
+      <!-- two windows carrying the brand yellow: enough to read as "supplied",
+           far short of a lit-up building -->
+      <g fill="#EDAE21" opacity=".42">
+        <rect x="1459" y="94" width="15" height="12" /><rect x="1501" y="138" width="15" height="12" />
+      </g>
+      <!-- entrance, sitting directly over the service connection point -->
+      <rect x="1471" y="158" width="14" height="24" fill="#FFFFFF" stroke="#D74627" stroke-width="1.2" />
+
+      <!-- residential layout -->
+      <g fill="#FFFFFF" stroke="#C0B8B0" stroke-width="1.2" stroke-linejoin="round">
+        <path d="M1540 182 L1540 166 L1554 154 L1568 166 L1568 182" />
+        <path d="M1578 182 L1578 166 L1592 154 L1606 166 L1606 182" />
+        <path d="M1616 182 L1616 166 L1630 154 L1644 166 L1644 182" />
+      </g>
+      <g fill="#EDAE21" opacity=".45">
+        <rect x="1550" y="169" width="8" height="8" /><rect x="1588" y="169" width="8" height="8" /><rect x="1626" y="169" width="8" height="8" />
+      </g>
+
+      <!-- consumer connection points, one under each supplied building -->
+      <g fill="#D74627">
+        <circle cx="1478" cy="182" r="2.6" style="animation:glowPulse 2.6s ease-in-out infinite;" />
+        <circle cx="1554" cy="182" r="2.6" style="animation:glowPulse 2.6s ease-in-out .5s infinite;" />
+        <circle cx="1592" cy="182" r="2.6" style="animation:glowPulse 2.6s ease-in-out .9s infinite;" />
+        <circle cx="1630" cy="182" r="2.6" style="animation:glowPulse 2.6s ease-in-out 1.3s infinite;" />
+      </g>
+
+      <text x="1432" y="-2" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.22em;fill:#B3381D;">END CONSUMERS</text>
+      <text x="1432" y="12" style="font:500 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;fill:#5A534C;">APARTMENTS &amp; LAYOUTS</text>
     </svg>
   </div>
 </section>
