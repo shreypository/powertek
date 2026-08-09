@@ -40,8 +40,8 @@ html{scroll-behavior:smooth;scroll-padding-top:112px;-webkit-font-smoothing:anti
   .pt-brand-sub{display:none!important}
 }
 @media (max-width:640px){
-  .pt-brand-name{font-size:17px!important;letter-spacing:.12em!important}
-  .pt-brand-mark{height:32px!important}
+  .pt-brand-name{font-size:18px!important;letter-spacing:.12em!important}
+  .pt-brand-mark{height:34px!important}
 }
 body{margin:0;background:#FFFFFF;color:#2C2A27;font-family:Inter,system-ui,sans-serif}
 a{color:#B3381D;text-decoration:none;transition:color .3s}
@@ -168,7 +168,7 @@ input,textarea,button{font-family:inherit}
 .pt-scope-rule{flex:none;width:26px;height:1px;background:linear-gradient(90deg,#D74627,rgba(237,174,33,.5));transform:translateY(-4px)}
 .pt-scope-t{font:400 clamp(14px,1.05vw,16px)/1.6 Inter,sans-serif;color:#3E3A36}
 
-.pt-tech{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;margin-top:22px;background:rgba(20,18,16,.1);border:1px solid rgba(20,18,16,.1);border-radius:14px;overflow:hidden}
+.pt-tech{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:1px;margin-top:22px;background:rgba(20,18,16,.1);border:1px solid rgba(20,18,16,.1);border-radius:14px;overflow:hidden}
 .pt-tech-cell{background:#FFFFFF;padding:22px 20px}
 .pt-tech-k{font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#8A8177}
 .pt-tech-v{margin-top:12px;font:500 clamp(15px,1.2vw,18px)/1.4 Inter,sans-serif;color:#141414}
@@ -331,6 +331,241 @@ input,textarea,button{font-family:inherit}
   .ptw-lift,.ptw-tilt,.ptw-spin,.ptw-face,.ptw-layer,.ptw-aura,.ptw-shadow,.ptw-swap-a,.ptw-swap-b,.ptw-read{transition:none!important;animation:none!important}
   .ptw-swap-b{display:none}
 }
+
+/* ===========================================================================
+   RESPONSIVE LAYER  +  WHY-POWERTEK HOVER
+   ---------------------------------------------------------------------------
+   Two kinds of rule live here and nothing else:
+
+   1. Rules inside a max-width media query. Every desktop width (>900px) is
+      untouched by these, so the desktop composition above is exactly what it
+      was.
+   2. Two unconditional groups that are deliberate, requested changes: the Why
+      Powertek card hover (a lift, no colour) and the safety nets marked below
+      as harmless at any width.
+
+   !important appears often because this template keeps its layout in inline
+   style attributes, which no selector can outrank. It is always applied to the
+   single declaration being overridden, never to a whole rule set, so a rule
+   here only ever changes the one property it names.
+=========================================================================== */
+
+/* ---- safety nets (no visual effect unless something would otherwise
+        overflow: `overflow-wrap:break-word` only breaks a word that has no
+        other way to fit, and every image here is already within its box) ---- */
+body{overflow-wrap:break-word}
+img{max-width:100%}
+
+/* ---- section gutters -------------------------------------------------------
+   Every section shell is `max-width:1360px;margin:0 auto;padding:0 40px`.
+   .pt-wrap tags them so one rule can tighten the gutter on small screens. */
+@media (max-width:900px){.pt-wrap{padding-left:28px!important;padding-right:28px!important}}
+@media (max-width:600px){.pt-wrap{padding-left:20px!important;padding-right:20px!important}}
+/* the stats band's cells carry their own 30px inset, so its shell stays narrow */
+@media (max-width:600px){
+  .pt-wrap-stats{padding-left:0!important;padding-right:0!important}
+  .pt-stat{padding:42px 20px!important}
+}
+
+/* ---- navbar ----------------------------------------------------------------
+   Above 900px nothing below applies and the bar is the original one. At 900px
+   and under, the five inline links would either overflow the bar or shrink to
+   13px text with no padding around it — not a target you can hit reliably with
+   a thumb — so they move into a sheet under the bar, opened by a bordered disc
+   drawn in the same idiom as the accordion +/- buttons and the modal close. */
+.pt-burger{display:none}
+.pt-mnav{display:none}
+@keyframes ptNavIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+@media (max-width:900px){
+  .pt-nav{display:none!important}
+  .pt-bar{gap:16px!important}
+
+  .pt-burger{
+    display:inline-flex;align-items:center;justify-content:center;flex:none;
+    width:46px;height:46px;padding:0;border-radius:50%;cursor:pointer;
+    background:#FFFFFF;border:1px solid rgba(20,18,16,.16);
+    transition:background .35s,border-color .35s;
+  }
+  .pt-burger:focus-visible{outline:2px solid #D74627;outline-offset:3px}
+  .pt-burger-box{position:relative;display:block;width:18px;height:12px}
+  .pt-burger-box span{
+    position:absolute;left:0;width:100%;height:1.5px;border-radius:2px;background:#141414;
+    transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .2s linear,background .35s;
+  }
+  .pt-burger-box span:nth-child(1){top:0}
+  .pt-burger-box span:nth-child(2){top:5.25px}
+  .pt-burger-box span:nth-child(3){top:10.5px}
+  .pt-burger-open{background:#D74627;border-color:#D74627}
+  .pt-burger-open .pt-burger-box span{background:#FFFFFF}
+  .pt-burger-open .pt-burger-box span:nth-child(1){transform:translateY(5.25px) rotate(45deg)}
+  .pt-burger-open .pt-burger-box span:nth-child(2){opacity:0}
+  .pt-burger-open .pt-burger-box span:nth-child(3){transform:translateY(-5.25px) rotate(-45deg)}
+
+  /* The sheet sits inside the fixed header, so it inherits the same translucent
+     white and backdrop blur the bar already has and overlays the hero rather
+     than pushing it down. */
+  .pt-mnav{
+    display:flex;flex-direction:column;
+    padding:4px 28px 24px;border-top:1px solid rgba(20,18,16,.09);
+    max-height:calc(100vh - 78px);overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    animation:ptNavIn .4s cubic-bezier(.22,1,.36,1) both;
+  }
+  .pt-mnav-link{
+    display:block;padding:17px 2px;
+    font:500 15px/1.2 Inter,sans-serif;letter-spacing:.01em;color:#57504A;
+    border-bottom:1px solid rgba(20,18,16,.08);transition:color .3s;
+  }
+  .pt-mnav-link:hover,.pt-mnav-link:focus-visible{color:#D74627}
+  .pt-mnav-cta{
+    display:flex;align-items:center;justify-content:center;
+    margin-top:20px;padding:17px 24px;border-radius:100px;
+    background:#D74627;color:#FFFFFF;font:600 14px/1 Inter,sans-serif;
+    box-shadow:0 8px 22px -10px rgba(215,70,39,.45);transition:background .35s,color .35s;
+  }
+  .pt-mnav-cta:hover,.pt-mnav-cta:focus-visible{background:#EDAE21;color:#141414}
+}
+@media (max-width:600px){.pt-mnav{padding-left:20px;padding-right:20px}}
+@media (prefers-reduced-motion:reduce){
+  .pt-mnav{animation:none!important}
+  .pt-burger,.pt-burger-box span{transition:none!important}
+}
+
+/* ---- hero ------------------------------------------------------------------
+   The h1 is 900-weight Satoshi at a 46px floor. Fourteen characters of
+   "Infrastructure" at that size is wider than a 320px screen's text column, so
+   the floor is lowered — and only the floor: the clamp's vw term and ceiling,
+   which is what desktop actually renders, are untouched. */
+/* The wheel's caption is a nowrap label + rule + degree readout sitting in a
+   9% inset. The wheel shrinks with the viewport from 1180px down but the
+   caption's text does not, so from there the row overran its inset and the
+   readout was being clipped at the page edge (visible at 1024). Giving the
+   caption the wheel's full width is the whole fix; nothing about the wheel
+   itself changes. */
+@media (max-width:1180px){
+  .ptw-meta{left:0;right:0}
+}
+@media (max-width:900px){
+  #home{padding-top:120px!important}
+  .ptw-meta{gap:10px!important}
+}
+@media (max-width:640px){
+  .pt-hero-h1{font-size:clamp(33px,10vw,46px)!important;letter-spacing:-.036em!important}
+  /* the only eyebrow long enough to wrap; line-height:1 is set for the single
+     line it occupies on desktop and reads as two crushed lines once it does */
+  .pt-hero-eyebrow{line-height:1.75!important}
+}
+@media (max-width:420px){
+  .ptw-meta{font-size:8px!important;letter-spacing:.16em!important;gap:8px!important}
+}
+
+/* The diagram is a 4.86:1 strip. Fitted to a phone's width it collapses to a
+   ~70px hairline in which nothing is legible, so below 900px its frame becomes
+   a horizontal scroller and the drawing holds a usable size inside it. The
+   frame itself is still exactly the width of the page, so the document never
+   gains any horizontal scroll of its own — and overscroll-behavior keeps a
+   swipe on the strip from chaining out to the page. */
+@media (max-width:900px){
+  .pt-diagram{
+    overflow-x:auto!important;overflow-y:hidden!important;
+    overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  }
+  .pt-diagram svg{min-width:1000px}
+}
+
+/* ---- section rhythm: 130/150px of vertical padding is a desktop measure ---- */
+@media (max-width:900px){
+  #about{padding-top:96px!important;padding-bottom:84px!important}
+  #why{padding-top:92px!important;padding-bottom:92px!important}
+  #services{padding-top:92px!important;padding-bottom:92px!important}
+  #projects{padding-top:92px!important;padding-bottom:96px!important}
+  #contact{padding-top:92px!important}
+}
+
+/* ---- Why Powertek: a physical lift, no colour ------------------------------
+   The orange border-and-shadow hover was removed at the markup level (it was a
+   `style-hover` attribute, which the runtime compiles into an !important
+   :hover rule that no stylesheet could have overridden), so nothing here has
+   to fight it and the resting colours are exactly as they were.
+
+   What replaces it is the lift alone: the cards keep the pointer-driven tilt
+   they already had — which carries a translateY(-5px) — and it is now eased
+   rather than snapped, over a shadow that deepens in the card's own hue. The
+   hover shadow is gated on (hover:hover) so a touch device, where :hover can
+   latch after a tap, never gets stuck in the lifted state. */
+@media (hover:hover){
+  /* The travel is stated here as well as coming from the tilt handler, which
+     writes an inline transform and therefore wins whenever it is running. This
+     is the floor: the card lifts on hover even before the first mousemove is
+     sampled, and by the same 5px either way. */
+  .pt-why-card:hover{transform:translateY(-5px);box-shadow:0 2px 6px rgba(28,20,14,.05),0 30px 60px -28px rgba(28,20,14,.34)!important}
+  .pt-why-card-hl:hover{box-shadow:0 2px 6px rgba(215,70,39,.07),0 30px 60px -28px rgba(215,70,39,.4)!important}
+}
+/* Reduced motion keeps the deeper shadow — that is not motion — but drops the
+   travel and the easing, so the card responds without ever moving. */
+@media (prefers-reduced-motion:reduce){
+  .pt-why-card{transition:none!important;transform:none!important}
+}
+
+/* ---- services accordions ---------------------------------------------------
+   The header row is num / title / voltage tag / disc on one line. Under ~680px
+   the tag and the title cannot share a line without the title being squeezed
+   below its own longest word, so the two rows are re-laid as a grid with the
+   tag under the title; the number and the disc span both rows and stay put.
+   No content is dropped and the disc keeps its full 34px target. */
+@media (max-width:680px){
+  .pt-acc-head{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    grid-template-areas:"num title icon" "num tag icon";
+    align-items:center;
+    gap:6px 14px!important;
+    padding-top:24px!important;padding-bottom:24px!important;
+  }
+  .pt-acc-num{grid-area:num;align-self:start;padding-top:7px}
+  .pt-acc-title{grid-area:title;font-size:20px!important}
+  .pt-acc-tag{grid-area:tag;align-self:start}
+  .pt-acc-icon{grid-area:icon}
+}
+
+/* ---- projects ---- */
+.pt-card-wrap,.pt-card{min-width:0}
+.pt-card-title{overflow-wrap:break-word}
+@media (max-width:680px){.pt-grid{gap:18px}}
+/* The cue is a hover prompt. With no hover to give it, show it outright —
+   the card is a role="button" and was always openable by tap regardless. */
+@media (hover:none){
+  .pt-card-cue{opacity:1;transform:none}
+}
+
+/* ---- project dossier modal ---- */
+.pt-modal-scroll{-webkit-overflow-scrolling:touch;min-height:0}
+@media (max-width:760px){
+  /* dvh tracks the browser chrome collapsing on a phone; ignored where
+     unsupported, which leaves the 94vh above in force */
+  .pt-modal{max-height:94dvh}
+  .pt-modal-title{font-size:clamp(24px,7vw,34px);overflow-wrap:break-word}
+  .pt-modal-body{overflow-wrap:break-word}
+}
+@media (max-width:600px){
+  .pt-modal-gallery:has(.pt-modal-fig:nth-child(2)){grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .pt-modal-root{padding:10px}
+  .pt-modal-scroll{padding:24px 18px 28px}
+  .pt-modal-x{top:10px;right:10px;width:38px;height:38px}
+  .pt-modal-head{padding-right:44px}
+  .pt-modal-completed{gap:10px;padding:11px 16px}
+  .pt-tech-cell{padding:18px 16px}
+}
+
+/* ---- footer ---- */
+@media (max-width:900px){.pt-foot-wrap{padding-left:28px!important;padding-right:28px!important}}
+@media (max-width:600px){
+  .pt-foot-wrap{padding:52px 20px 32px!important}
+  .pt-foot-cols{gap:34px!important}
+}
 </style>
 </helmet>
 
@@ -353,7 +588,7 @@ input,textarea,button{font-family:inherit}
 </sc-if>
 
 <header style="position:fixed;top:2px;left:0;right:0;z-index:70;background:rgba(255,255,255,.8);backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid rgba(20,18,16,.09);">
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;height:clamp(76px,7vw,92px);display:flex;align-items:center;justify-content:space-between;gap:32px;">
+  <div class="pt-wrap pt-bar" style="max-width:1360px;margin:0 auto;padding:0 40px;height:clamp(76px,7vw,92px);display:flex;align-items:center;justify-content:space-between;gap:32px;">
     <!-- The anchor keeps doing exactly what it did (smooth-scroll to #home);
          onBrandClick only adds the three-revolution flourish on the hero wheel
          on top of it — it never preventDefaults or navigates. -->
@@ -371,7 +606,25 @@ input,textarea,button{font-family:inherit}
       <a href="#projects" style="font:500 13px/1 Inter,sans-serif;letter-spacing:.01em;color:#57504A;transition:color .3s;" style-hover="color:#D74627">Projects</a>
       <a href="#contact" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="font:600 13px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;padding:13px 24px;border-radius:100px;transition:background .35s,color .35s,box-shadow .4s,transform .25s cubic-bezier(.2,.9,.2,1);box-shadow:0 8px 22px -10px rgba(215,70,39,.45);" style-hover="background:#EDAE21;color:#141414;box-shadow:0 12px 30px -10px rgba(237,174,33,.55)">Enquire</a>
     </nav>
+
+    <!-- Mobile menu trigger. Hidden above 900px, where the inline nav above is
+         the navigation; below it the links move into .pt-mnav. Drawn as a
+         bordered disc so it reads as the same family of controls as the
+         accordion +/- buttons and the modal close. -->
+    <button type="button" class="{{ burgerCls }}" onClick="{{ toggleNav }}" aria-controls="pt-mobile-nav" aria-expanded="{{ navOpen }}" aria-label="Menu">
+      <span class="pt-burger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
   </div>
+
+  <sc-if value="{{ navOpen }}">
+  <div class="pt-mnav" id="pt-mobile-nav">
+    <a class="pt-mnav-link" href="#about" onClick="{{ closeNav }}">About</a>
+    <a class="pt-mnav-link" href="#why" onClick="{{ closeNav }}">Why Powertek</a>
+    <a class="pt-mnav-link" href="#services" onClick="{{ closeNav }}">Services</a>
+    <a class="pt-mnav-link" href="#projects" onClick="{{ closeNav }}">Projects</a>
+    <a class="pt-mnav-cta" href="#contact" onClick="{{ closeNav }}">Enquire</a>
+  </div>
+  </sc-if>
 </header>
 
 <section id="home" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:150px 0 0;isolation:isolate;">
@@ -380,12 +633,12 @@ input,textarea,button{font-family:inherit}
 
   <!-- position:relative makes this container the positioning context for the
        energy wheel at the end of it; nothing else about the hero layout changes. -->
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;width:100%;position:relative;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;width:100%;position:relative;">
     <div style="display:flex;align-items:center;gap:16px;animation:riseSm .8s cubic-bezier(.2,.9,.2,1) .15s both;">
       <span style="width:34px;height:1px;background:linear-gradient(90deg,transparent,#D74627);"></span>
-      <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">BENGALURU · EST. 1995 · CLASS I LICENSED</span>
+      <span class="pt-hero-eyebrow" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">BENGALURU · EST. 1995 · CLASS I LICENSED</span>
     </div>
-    <h1 style="margin:30px 0 0;max-width:16ch;font:900 clamp(46px,7.2vw,124px)/0.94 Satoshi,Inter,sans-serif;letter-spacing:-.045em;color:#141414;text-wrap:balance;">
+    <h1 class="pt-hero-h1" style="margin:30px 0 0;max-width:16ch;font:900 clamp(46px,7.2vw,124px)/0.94 Satoshi,Inter,sans-serif;letter-spacing:-.045em;color:#141414;text-wrap:balance;">
       <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .3s both;">Powering</span>
       <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .44s both;">Infrastructure</span>
       <span style="display:block;animation:blurIn 1.1s cubic-bezier(.2,.9,.2,1) .58s both;background:linear-gradient(94deg,#EA6A34,#D74627 55%,#9C2F17);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Since 1995</span>
@@ -466,7 +719,7 @@ input,textarea,button{font-family:inherit}
     </div>
   </div>
 
-  <div style="margin-top:clamp(48px,7vh,96px);width:100%;overflow:hidden;">
+  <div class="pt-diagram" style="margin-top:clamp(48px,7vh,96px);width:100%;overflow:hidden;">
     <!-- The container height must stay tied to the SVG's own aspect ratio. It was
          previously driven by 26vh while the width was driven by 100% of the viewport,
          so the container's ratio drifted away from the viewBox's; under `slice` that
@@ -708,22 +961,22 @@ input,textarea,button{font-family:inherit}
 </section>
 
 <section ref="{{ statsRef }}" style="position:relative;border-top:1px solid rgba(20,18,16,.1);border-bottom:1px solid rgba(20,18,16,.1);background:linear-gradient(180deg,#F7F5F3,#FFFFFF);">
-  <div style="max-width:1360px;margin:0 auto;padding:0 10px;">
+  <div class="pt-wrap pt-wrap-stats" style="max-width:1360px;margin:0 auto;padding:0 10px;">
    <div style="overflow:hidden;">
-   <div style="margin-left:-1px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
-    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 34%;">
+   <div style="margin-left:-1px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));">
+    <div class="pt-stat" style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 34%;">
       <div style="font:900 clamp(48px,5vw,74px)/1 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;">{{ cy }}<span style="color:#D74627;">+</span></div>
       <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">YEARS EXPERIENCE</div>
     </div>
-    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 38%;">
+    <div class="pt-stat" style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 38%;">
       <div style="font:900 clamp(48px,5vw,74px)/1 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;">{{ cp }}<span style="color:#D74627;">+</span></div>
       <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">PROJECTS COMPLETED</div>
     </div>
-    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 42%;">
+    <div class="pt-stat" style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 42%;">
       <div style="font:900 clamp(38px,3.6vw,56px)/1.05 Satoshi,Inter,sans-serif;letter-spacing:-.03em;color:#141414;">Class I</div>
       <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">LICENSED CONTRACTOR</div>
     </div>
-    <div style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 46%;">
+    <div class="pt-stat" style="padding:58px 30px;border-left:1px solid rgba(20,18,16,.09);animation:rise linear both;animation-timeline:view();animation-range:entry 6% cover 46%;">
       <div style="font:900 clamp(38px,3.6vw,56px)/1.05 Satoshi,Inter,sans-serif;letter-spacing:-.03em;color:#141414;">HT &amp; LT</div>
       <div style="margin-top:12px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">SPECIALISTS</div>
     </div>
@@ -734,8 +987,8 @@ input,textarea,button{font-family:inherit}
 
 <section id="about" style="position:relative;padding:150px 0 130px;">
   <div style="position:absolute;top:-10%;left:-8%;width:44vw;height:44vw;border-radius:50%;background:radial-gradient(circle,rgba(215,70,39,.085),transparent 68%);filter:blur(30px);pointer-events:none;"></div>
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:clamp(48px,7vw,120px);align-items:start;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:clamp(48px,7vw,120px);align-items:start;">
       <div>
         <div style="display:flex;align-items:center;gap:14px;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 30%;">
           <span style="width:28px;height:1px;background:#D74627;"></span>
@@ -809,7 +1062,7 @@ input,textarea,button{font-family:inherit}
 </section>
 
 <section id="why" style="position:relative;padding:130px 0;background:linear-gradient(180deg,#FFFFFF,#F8F6F4 50%,#FFFFFF);border-top:1px solid rgba(20,18,16,.08);">
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;">
     <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:32px;">
       <div>
         <div style="display:flex;align-items:center;gap:14px;">
@@ -821,57 +1074,57 @@ input,textarea,button{font-family:inherit}
       <div style="font:500 10px/1.8 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#625B53;text-align:right;">08 / CAPABILITIES</div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:64px;">
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 30%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px;margin-top:64px;">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 30%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">01</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">30+ Years Experience</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Continuously licensed and executing since 1995, through every revision of the state electrical code.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">02</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Class I Licensed Contractor</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Authorised for unlimited-capacity HT and LT works, including 11 kV switchgear and transformers.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 34%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 34%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">03</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Complete HT &amp; LT Infrastructure</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">RMU to final distribution board under one contract — no coordination gaps between vendors.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 36%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 36%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">04</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Labour + Liaison</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Skilled site labour and BESCOM liaison handled in-house, from sanction to energisation.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 38%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 38%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">05</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Experienced Engineers</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Site engineers who have commissioned SCADA substations, data centres and hospital loads.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 40%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 40%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">06</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Safety &amp; Compliance</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Documented safe work method, PPE discipline and inspection-ready records on every site.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 42%;" style-hover="border-color:rgba(215,70,39,.4);box-shadow:0 26px 56px -32px rgba(215,70,39,.42)">
+      <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 42%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">07</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">End-to-End Execution</div>
           <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">Supply, installation, cabling, termination, testing and commissioning as a single scope.</p>
         </div>
       </div>
-      <div onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:linear-gradient(158deg,#FDF3EF,#FFFFFF);border:1px solid rgba(215,70,39,.22);box-shadow:0 1px 2px rgba(215,70,39,.05),0 18px 40px -24px rgba(215,70,39,.3);transform-style:preserve-3d;transition:border-color .4s,box-shadow .5s;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 44%;" style-hover="border-color:rgba(215,70,39,.55);box-shadow:0 26px 56px -32px rgba(215,70,39,.5)">
+      <div class="pt-why-card pt-why-card-hl" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:linear-gradient(158deg,#FDF3EF,#FFFFFF);border:1px solid rgba(215,70,39,.22);box-shadow:0 1px 2px rgba(215,70,39,.05),0 18px 40px -24px rgba(215,70,39,.3);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 44%;">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">08</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Timely Delivery</div>
@@ -883,7 +1136,7 @@ input,textarea,button{font-family:inherit}
 </section>
 
 <section id="services" style="position:relative;padding:130px 0;">
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;">
     <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:32px;">
       <div>
         <div style="display:flex;align-items:center;gap:14px;">
@@ -898,16 +1151,16 @@ input,textarea,button{font-family:inherit}
     <div style="margin-top:60px;border-bottom:1px solid rgba(20,18,16,.1);">
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 26%;">
-        <div onClick="{{ ts1 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">01</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">HT Works</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">11 kV</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts1 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">01</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">HT Works</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">11 kV</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s1 }}">−</sc-if><sc-if value="{{ ns1 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
         <sc-if value="{{ s1 }}">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
           <div>
             <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:50ch;">High-tension works from the incoming 11 kV point: ring main units, VCB panels, metering cubicles, HT underground cable laying, pothead and end terminations, and transformer installation with all statutory approvals.</p>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;">
@@ -932,16 +1185,16 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 28%;">
-        <div onClick="{{ ts2 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">02</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">LT Works</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">415 V</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts2 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">02</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">LT Works</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">415 V</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s2 }}">−</sc-if><sc-if value="{{ ns2 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
         <sc-if value="{{ s2 }}">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:36px;padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
           <div>
             <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:50ch;">Low-tension distribution downstream of the transformer: LT main and kiosk panels, metering and distribution boards, feeder pillars, busbar sizing, underground LT cabling and earthing systems.</p>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;">
@@ -963,11 +1216,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 30%;">
-        <div onClick="{{ ts3 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">03</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Apartment Electrification</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">RESIDENTIAL</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts3 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">03</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Apartment Electrification</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">RESIDENTIAL</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s3 }}">−</sc-if><sc-if value="{{ ns3 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -979,11 +1232,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 32%;">
-        <div onClick="{{ ts4 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">04</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Residential Layout Electrification</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">LAYOUTS</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts4 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">04</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Residential Layout Electrification</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">LAYOUTS</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s4 }}">−</sc-if><sc-if value="{{ ns4 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -995,11 +1248,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 34%;">
-        <div onClick="{{ ts5 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">05</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Commercial Projects</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">MALLS · OFFICES</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts5 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">05</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Commercial Projects</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">MALLS · OFFICES</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s5 }}">−</sc-if><sc-if value="{{ ns5 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -1011,11 +1264,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 36%;">
-        <div onClick="{{ ts6 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">06</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Hospital Electrical Infrastructure</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">CRITICAL LOAD</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts6 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">06</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Hospital Electrical Infrastructure</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">CRITICAL LOAD</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s6 }}">−</sc-if><sc-if value="{{ ns6 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -1027,11 +1280,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 38%;">
-        <div onClick="{{ ts7 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">07</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Testing &amp; Commissioning</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">HANDOVER</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts7 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">07</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Testing &amp; Commissioning</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">HANDOVER</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s7 }}">−</sc-if><sc-if value="{{ ns7 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -1043,11 +1296,11 @@ input,textarea,button{font-family:inherit}
       </div>
 
       <div style="border-top:1px solid rgba(20,18,16,.1);animation:riseSm linear both;animation-timeline:view();animation-range:entry 2% cover 40%;">
-        <div onClick="{{ ts8 }}" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
-          <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">08</span>
-          <span style="flex:1;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Liaison &amp; BESCOM Coordination</span>
-          <span style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">APPROVALS</span>
-          <span style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
+        <div onClick="{{ ts8 }}" class="pt-acc-head" role="button" tabindex="0" style="cursor:pointer;padding:32px 6px;display:flex;align-items:center;gap:clamp(16px,3vw,40px);transition:background .4s,padding-left .35s;" style-hover="background:#FDF6F1;padding-left:18px">
+          <span class="pt-acc-num" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#B3381D;width:24px;flex:none;">08</span>
+          <span class="pt-acc-title" style="flex:1;min-width:0;font:700 clamp(21px,2.3vw,33px)/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.028em;color:#1C1B19;">Liaison &amp; BESCOM Coordination</span>
+          <span class="pt-acc-tag" style="font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#5F584F;flex:none;">APPROVALS</span>
+          <span class="pt-acc-icon" style="flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(20,18,16,.22);display:grid;place-items:center;color:#B3381D;font:400 16px/1 Inter,sans-serif;">
             <sc-if value="{{ s8 }}">−</sc-if><sc-if value="{{ ns8 }}" hint-placeholder-val="{{ true }}">+</sc-if>
           </span>
         </div>
@@ -1063,7 +1316,7 @@ input,textarea,button{font-family:inherit}
 </section>
 
 <section id="projects" style="position:relative;padding:130px 0 140px;background:linear-gradient(180deg,#FFFFFF,#F8F6F4 40%,#FFFFFF);border-top:1px solid rgba(20,18,16,.08);">
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;">
 
     <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:36px;">
       <div>
@@ -1136,14 +1389,14 @@ input,textarea,button{font-family:inherit}
 </section>
 <section id="contact" style="position:relative;padding:130px 0 0;border-top:1px solid rgba(20,18,16,.08);">
   <div style="position:absolute;top:6%;right:-10%;width:46vw;height:46vw;border-radius:50%;background:radial-gradient(circle,rgba(215,70,39,.075),transparent 68%);filter:blur(30px);pointer-events:none;"></div>
-  <div style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
+  <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
     <div style="display:flex;align-items:center;gap:14px;">
       <span style="width:28px;height:1px;background:#D74627;"></span>
       <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">CONTACT</span>
     </div>
     <h2 style="margin:24px 0 0;max-width:22ch;font:900 clamp(34px,4.4vw,62px)/1.03 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Send us the drawings. We will send back a schedule.</h2>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:clamp(32px,4vw,64px);margin-top:64px;align-items:start;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:clamp(32px,4vw,64px);margin-top:64px;align-items:start;">
       <div style="display:grid;gap:14px;">
         <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
           <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">EMAIL</div>
@@ -1204,34 +1457,30 @@ input,textarea,button{font-family:inherit}
         </sc-if>
       </form>
     </div>
-
-    <div style="position:relative;overflow:hidden;margin-top:clamp(40px,5vw,72px);height:clamp(300px,38vh,420px);border-radius:24px;border:1px solid rgba(20,18,16,.13);background:linear-gradient(150deg,#F7F5F3,#FCFAF9);animation:rise linear both;animation-timeline:view();animation-range:entry 3% cover 30%;">
-      <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(20,18,16,.055) 0 1px,transparent 1px 42px),repeating-linear-gradient(90deg,rgba(20,18,16,.055) 0 1px,transparent 1px 42px);"></div>
-      <div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 55%,rgba(215,70,39,.07),transparent 70%);"></div>
-      <div style="position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:32px;">
-        <div>
-          <div style="width:14px;height:14px;margin:0 auto;border-radius:50%;background:#D74627;box-shadow:0 0 0 8px rgba(215,70,39,.1),0 0 0 18px rgba(215,70,39,.05),0 0 18px rgba(215,70,39,.4);animation:glowPulse 2.6s ease-in-out infinite;"></div>
-          <div style="margin-top:24px;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.28em;color:#5F584F;">GOOGLE MAPS EMBED</div>
-          <div style="margin-top:12px;font:500 14px/1.6 'IBM Plex Mono',monospace;letter-spacing:.05em;color:#5C554E;">MARUTHI NAGAR · MADIWALA · BENGALURU 560068</div>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <footer style="margin-top:clamp(70px,8vw,120px);border-top:1px solid rgba(20,18,16,.1);background:#F7F5F3;">
-    <div style="max-width:1360px;margin:0 auto;padding:64px 40px 40px;">
+  <!-- The map panel that used to sit here has been removed. The footer's own
+       top margin is now the only gap between the enquiry grid and the footer
+       rule, so it is set a little wider than it was to read as a deliberate
+       section break rather than as the hole the map left behind. -->
+  <footer style="margin-top:clamp(84px,9vw,140px);border-top:1px solid rgba(20,18,16,.1);background:#F7F5F3;">
+    <div class="pt-foot-wrap" style="max-width:1360px;margin:0 auto;padding:64px 40px 40px;">
       <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px;">
-        <div style="max-width:34ch;">
-          <div style="display:flex;align-items:center;gap:13px;">
-            <img src="assets/powertek-mark.png" alt="Powertek logo" style="width:38px;height:auto;display:block;" />
-            <span style="display:flex;flex-direction:column;line-height:1;">
-              <span style="font:900 21px/1 Satoshi,Inter,sans-serif;letter-spacing:.16em;color:#141414;">POWERTEK</span>
-              <span style="font:400 9px/1 'IBM Plex Mono',monospace;letter-spacing:.15em;color:#5A534C;margin-top:6px;">CLASS I ELECTRICAL CONTRACTORS,<br />CONSULTANTS &amp; ENGINEERS</span>
+        <div style="max-width:36ch;min-width:0;">
+          <!-- Footer lockup, deliberately larger than the navbar's: this is the
+               closing signature of the page. Both the mark and the wordmark are
+               fluid so the pair shrinks back in step on a phone instead of
+               forcing the column wider than the gutter. -->
+          <div class="pt-foot-brand" style="display:flex;align-items:center;gap:clamp(13px,1.4vw,16px);min-width:0;">
+            <img src="assets/powertek-mark.png" alt="Powertek logo" style="width:clamp(46px,5.4vw,56px);height:auto;display:block;flex:none;" />
+            <span style="display:flex;flex-direction:column;line-height:1;min-width:0;">
+              <span style="font:900 clamp(24px,2.6vw,28px)/1 Satoshi,Inter,sans-serif;letter-spacing:.16em;color:#141414;">POWERTEK</span>
+              <span style="font:400 9px/1.35 'IBM Plex Mono',monospace;letter-spacing:.15em;color:#5A534C;margin-top:9px;">CLASS I ELECTRICAL CONTRACTORS,<br />CONSULTANTS &amp; ENGINEERS</span>
             </span>
           </div>
           <p style="margin:26px 0 0;font:400 14px/1.7 Inter,sans-serif;color:#5C554E;">Complete external electrical infrastructure across Bengaluru since 1995. HT &amp; LT works, layout electrification, testing and commissioning.</p>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,90px);">
+        <div class="pt-foot-cols" style="display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,90px);">
           <div style="display:grid;gap:14px;align-content:start;">
             <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#625B53;">SECTIONS</div>
             <a href="#about" style="font:400 14px/1 Inter,sans-serif;color:#605952;">About</a>
@@ -1636,7 +1885,7 @@ const PROJECT_DATA = [
 const pad2 = (n) => (n < 10 ? '0' : '') + n;
 
 class Component extends DCLogic {
-  state = { cy: 30, cp: 100, svc: {}, sending: false, sent: false, openIndex: null };
+  state = { cy: 30, cp: 100, svc: {}, sending: false, sent: false, openIndex: null, navOpen: false };
 
   canvasRef = React.createRef();
   statsRef = React.createRef();
@@ -1651,6 +1900,10 @@ class Component extends DCLogic {
     this.startWheel();
     this.watchStats();
     document.addEventListener('keydown', this.onGlobalKey);
+    // The mobile sheet only exists below 900px. Past that line CSS stops
+    // painting it, but the state would stay open — so drop it and keep the two
+    // in step. Same window resize signal the canvas already listens on.
+    window.addEventListener('resize', this.onNavResize);
   }
 
   // The DC runtime calls componentDidUpdate(prevProps) only — there is no
@@ -1690,7 +1943,34 @@ class Component extends DCLogic {
     if (this.io) this.io.disconnect();
     clearTimeout(this.sendTimer);
     document.removeEventListener('keydown', this.onGlobalKey);
+    window.removeEventListener('resize', this.onNavResize);
     this.releaseModal();
+  }
+
+  /* ---------------- mobile navigation ----------------
+     Below 900px the inline links are replaced by a stacked sheet under the bar.
+     Only the open/closed flag lives here; everything else is CSS. */
+
+  onNavResize = () => { if (window.innerWidth > 900) this.closeNav(); };
+
+  toggleNav = () => this.setState((s) => ({ navOpen: !s.navOpen }));
+
+  // Bound to the sheet's links, which keep their plain #hash navigation — this
+  // only folds the sheet away behind them.
+  closeNav = () => { if (this.state.navOpen) this.setState({ navOpen: false }); };
+
+  /* Cursor-driven flourishes (the Why Powertek tilt, the magnetic buttons) are
+     mouse-only. A touch tap emits one synthetic mousemove but never a
+     mouseleave, so on a phone those handlers would set a transform that nothing
+     ever clears and leave the element stuck lifted. Reduced motion opts out for
+     the same reason the CSS transitions do. */
+  finePointer() {
+    if (this._fine === undefined) {
+      const mm = window.matchMedia;
+      this._fine = !!(mm && mm('(hover:hover) and (pointer:fine)').matches) &&
+        !(mm && mm('(prefers-reduced-motion:reduce)').matches);
+    }
+    return this._fine;
   }
 
   /* ---------------- project dossier modal ---------------- */
@@ -2185,6 +2465,7 @@ class Component extends DCLogic {
   }
 
   onTilt = (e) => {
+    if (!this.finePointer()) return;
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
@@ -2196,6 +2477,7 @@ class Component extends DCLogic {
   };
 
   onMagnet = (e) => {
+    if (!this.finePointer()) return;
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
@@ -2227,6 +2509,10 @@ class Component extends DCLogic {
       wheelSpinRef: this.wheelSpinRef,
       wheelReadRef: this.wheelReadRef,
       onBrandClick: this.onBrandClick,
+      navOpen: this.state.navOpen,
+      burgerCls: this.state.navOpen ? 'pt-burger pt-burger-open' : 'pt-burger',
+      toggleNav: this.toggleNav,
+      closeNav: this.closeNav,
       submit: this.submit,
       sending: this.state.sending,
       sent: this.state.sent,
