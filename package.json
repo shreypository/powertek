@@ -1,0 +1,14 @@
+{
+  "name": "powertek-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Powertek marketing site — static frontend plus Vercel serverless contact endpoint.",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "google-auth-library": "^9.0.0",
+    "resend": "^4.0.0"
+  }
+}

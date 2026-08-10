@@ -1425,6 +1425,11 @@ img{max-width:100%}
 
       <form onSubmit="{{ submit }}" style="padding:clamp(26px,3vw,40px);border-radius:24px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 22px 50px -28px rgba(28,20,14,.26);">
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">PROJECT ENQUIRY</div>
+        <!-- Honeypot. Positioned off-screen and out of the tab order, so no
+             human ever sees or fills it; automated spam that fills every input
+             is discarded server-side. Absolutely positioned, therefore out of
+             flow — it adds nothing to the form's layout. -->
+        <input type="text" name="website" tabindex="-1" autoComplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;" />
         <div style="display:grid;gap:16px;margin-top:26px;">
           <label style="display:grid;gap:9px;">
             <span style="font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;color:#6B645C;">NAME</span>
@@ -1443,7 +1448,7 @@ img{max-width:100%}
             <textarea name="message" rows="4" placeholder="Location, sanctioned load, transformer capacity, expected timeline" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.55 Inter,sans-serif;outline:none;resize:vertical;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6"></textarea>
           </label>
         </div>
-        <button type="submit" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;width:100%;margin-top:26px;padding:19px 26px;border:none;border-radius:100px;cursor:pointer;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;display:flex;align-items:center;justify-content:center;gap:12px;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
+        <button type="submit" disabled="{{ busy }}" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;width:100%;margin-top:26px;padding:19px 26px;border:none;border-radius:100px;cursor:pointer;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;display:flex;align-items:center;justify-content:center;gap:12px;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
           <sc-if value="{{ idle }}" hint-placeholder-val="{{ true }}">Send Enquiry</sc-if>
           <sc-if value="{{ sending }}">
             <span style="width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:currentColor;animation:spin .7s linear infinite;"></span>
@@ -1454,6 +1459,11 @@ img{max-width:100%}
         </button>
         <sc-if value="{{ sent }}">
         <p style="margin:18px 0 0;font:400 13px/1.6 Inter,sans-serif;color:#6B645C;animation:riseSm .5s cubic-bezier(.2,.9,.2,1) both;">Thank you. We will respond within one working day. For urgent site requirements, call +91 98452 39932.</p>
+        </sc-if>
+        <!-- Error copy. Same type and entrance animation as the success note
+             above, in the brand red already used by the section labels. -->
+        <sc-if value="{{ error }}">
+        <p role="alert" style="margin:18px 0 0;font:400 13px/1.6 Inter,sans-serif;color:#B3381D;animation:riseSm .5s cubic-bezier(.2,.9,.2,1) both;">{{ error }}</p>
         </sc-if>
       </form>
     </div>
@@ -1885,7 +1895,7 @@ const PROJECT_DATA = [
 const pad2 = (n) => (n < 10 ? '0' : '') + n;
 
 class Component extends DCLogic {
-  state = { cy: 30, cp: 100, svc: {}, sending: false, sent: false, openIndex: null, navOpen: false };
+  state = { cy: 30, cp: 100, svc: {}, sending: false, sent: false, error: '', openIndex: null, navOpen: false };
 
   canvasRef = React.createRef();
   statsRef = React.createRef();
@@ -1941,7 +1951,6 @@ class Component extends DCLogic {
       this.cv.removeEventListener('pointerleave', this.onLeave);
     }
     if (this.io) this.io.disconnect();
-    clearTimeout(this.sendTimer);
     document.removeEventListener('keydown', this.onGlobalKey);
     window.removeEventListener('resize', this.onNavResize);
     this.releaseModal();
@@ -2486,11 +2495,67 @@ class Component extends DCLogic {
   };
   onMagnetLeave = (e) => { e.currentTarget.style.transform = 'translate(0,0)'; };
 
+  // Enquiry submit. Posts JSON to the serverless endpoint at /api/contact,
+  // which is the only network call the page makes — no keys or provider
+  // configuration exist on the client. The inputs are uncontrolled, so a failed
+  // attempt leaves everything the visitor typed exactly where it was and the
+  // button returns to its idle label for a retry.
   submit = (e) => {
     if (e && e.preventDefault) e.preventDefault();
+    // Guards a double click and the terminal "sent" state, so one enquiry can
+    // never be posted twice.
     if (this.state.sending || this.state.sent) return;
-    this.setState({ sending: true });
-    this.sendTimer = setTimeout(() => this.setState({ sending: false, sent: true }), 1300);
+
+    // React nulls out currentTarget once the handler returns, so the form is
+    // captured now rather than inside the fetch callbacks.
+    const form = e && (e.currentTarget || e.target);
+    if (!form || !form.elements) return;
+    const read = (n) => {
+      const el = form.elements[n];
+      return el && typeof el.value === 'string' ? el.value.trim() : '';
+    };
+
+    const payload = {
+      name: read('name'),
+      email: read('email'),
+      phone: read('phone'),
+      message: read('message'),
+      website: read('website')
+    };
+
+    // Client-side checks are a courtesy only — /api/contact validates the same
+    // rules again and is the authority.
+    if (!payload.name || !payload.email || !payload.message) {
+      this.setState({ error: 'Please fill in your name, email and project details.' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(payload.email)) {
+      this.setState({ error: 'Please enter a valid email address.' });
+      return;
+    }
+
+    this.setState({ sending: true, error: '' });
+
+    const fail = (msg) => this.setState({ sending: false, error: msg });
+
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then((res) => res.json().then((data) => ({ res, data }), () => ({ res, data: null })))
+      .then(({ res, data }) => {
+        if (res.ok && data && data.success) {
+          this.setState({ sending: false, sent: true, error: '' });
+          // The button is now terminal ("Enquiry Received") and the thank-you
+          // note has replaced the form's call to action, so the fields are
+          // cleared to match.
+          if (form.reset) form.reset();
+          return;
+        }
+        fail((data && data.message) || 'We couldn’t submit your enquiry. Please try again, or email powertek.elec@gmail.com directly.');
+      })
+      .catch(() => fail('We couldn’t reach the server. Please check your connection and try again, or call +91 98452 39932.'));
   };
 
   renderVals() {
@@ -2516,6 +2581,8 @@ class Component extends DCLogic {
       submit: this.submit,
       sending: this.state.sending,
       sent: this.state.sent,
+      error: this.state.error,
+      busy: this.state.sending || this.state.sent,
       idle: !this.state.sending && !this.state.sent
     };
     // Projects grid. Each card carries its own open handler plus a scroll-driven
