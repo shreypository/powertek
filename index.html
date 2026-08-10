@@ -566,6 +566,243 @@ img{max-width:100%}
   .pt-foot-wrap{padding:52px 20px 32px!important}
   .pt-foot-cols{gap:34px!important}
 }
+
+/* ===========================================================================
+   CONTACT SECTION  (.pt-cx-*)
+   A visual pass only. Every field name, handler, state binding and the
+   fetch('/api/contact') call are untouched — nothing in this block can reach
+   them, and nothing outside #contact carries a .pt-cx-* class.
+
+   Nothing here is invented: the palette, the 20/24px radii, the two-layer
+   shadow, the 9-10px IBM Plex Mono labels, the 34px drafting grid and the
+   cubic-bezier(.22,1,.36,1) easing are all lifted from the blocks above so the
+   section reads as the same drawing as the rest of the site.
+=========================================================================== */
+
+/* ---- the sheet the section is drawn on -------------------------------------
+   Two grid pitches (the dossier modal's 34px at its own .028 alpha, plus a
+   136px horizontal rule for the heavier drafting line) and a sparse scatter of
+   red and yellow connection nodes, all under a radial mask so the linework has
+   faded out entirely before it reaches the section edges. inset:0 and
+   pointer-events:none: it cannot be clicked and cannot add a pixel of width. */
+.pt-cx-bg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(circle,rgba(215,70,39,.4) 0 1.5px,transparent 1.7px),
+    radial-gradient(circle,rgba(237,174,33,.42) 0 1.3px,transparent 1.5px),
+    repeating-linear-gradient(0deg,rgba(20,18,16,.028) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(90deg,rgba(20,18,16,.028) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(0deg,rgba(20,18,16,.045) 0 1px,transparent 1px 136px);
+  background-size:272px 272px,272px 272px,auto,auto,auto;
+  background-position:18px 52px,154px 188px,0 0,0 0,0 0;
+  -webkit-mask-image:radial-gradient(115% 74% at 50% 32%,#000 22%,transparent 74%);
+  mask-image:radial-gradient(115% 74% at 50% 32%,#000 22%,transparent 74%);
+}
+
+/* ---- heading micro-label ---------------------------------------------------
+   Sits under the h2 in the same mono the section eyebrow uses. The rule draws
+   itself in on scroll with the existing `widen` keyframe. */
+.pt-cx-meta{
+  display:flex;align-items:center;gap:16px;margin-top:24px;
+  animation:riseSm linear both;animation-timeline:view();animation-range:entry 5% cover 30%;
+}
+.pt-cx-meta-rule{
+  flex:none;width:clamp(44px,7vw,92px);height:1px;
+  background:linear-gradient(90deg,#D74627,#EDAE21);
+  transform-origin:0 50%;
+  animation:widen linear both;animation-timeline:view();animation-range:entry 6% cover 26%;
+}
+.pt-cx-meta-txt{font:500 9.5px/1.7 'IBM Plex Mono',monospace;letter-spacing:.26em;color:#7B736A}
+
+/* ---- left contact cards ----------------------------------------------------
+   The three information cards carry their look here rather than inline so the
+   hover state can reach border-color (an inline `border` shorthand would
+   otherwise win). Resting appearance is byte-for-byte what it was: white,
+   20px radius, the same hairline border and the same two-layer shadow. */
+.pt-cx-card{
+  position:relative;overflow:hidden;
+  padding:26px 28px;border-radius:20px;
+  background-color:#FFFFFF;
+  /* a 44px patch of fine drafting grid tucked into the bottom-right corner */
+  background-image:
+    repeating-linear-gradient(0deg,rgba(20,18,16,.045) 0 1px,transparent 1px 8px),
+    repeating-linear-gradient(90deg,rgba(20,18,16,.045) 0 1px,transparent 1px 8px);
+  background-repeat:no-repeat;
+  background-size:44px 44px;
+  background-position:right -1px bottom -1px;
+  border:1px solid rgba(20,18,16,.1);
+  box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);
+  transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s cubic-bezier(.22,1,.36,1),border-color .55s cubic-bezier(.22,1,.36,1);
+}
+/* index, under a short red tick — the drafting mark the project cards use */
+.pt-cx-card::after,.pt-cx-wa::after{
+  content:attr(data-idx);position:absolute;top:19px;right:22px;
+  padding-top:8px;border-top:1px solid rgba(215,70,39,.34);
+  font:500 9px/1 'IBM Plex Mono',monospace;letter-spacing:.18em;color:#B9B1A9;
+  transition:color .55s cubic-bezier(.22,1,.36,1),border-color .55s cubic-bezier(.22,1,.36,1);
+}
+/* left-edge indicator, wiping down red-orange into yellow on hover */
+.pt-cx-card::before,.pt-cx-wa::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,#D74627,#EDAE21);
+  transform:scaleY(0);transform-origin:50% 0;
+  transition:transform .6s cubic-bezier(.22,1,.36,1);
+}
+/* The WhatsApp card keeps its own inline tint and its magnet transform; it only
+   borrows the two technical marks so it reads as 04 in the same series. */
+.pt-cx-wa{position:relative;overflow:hidden}
+/* This card carries a vertically-centred 36px arrow disc on its right, so the
+   index turns its tick from a rule above the number into one beside it and
+   sits high enough to clear the disc entirely. */
+.pt-cx-wa::after{
+  top:11px;right:18px;
+  padding:0 0 0 8px;
+  border-top:none;border-left:1px solid rgba(215,70,39,.4);
+  color:#C08A76;
+}
+
+/* Hover is gated on a real pointer so a tap on a phone cannot latch the card
+   into the lifted state — the same guard the Why Powertek cards use. */
+@media (hover:hover){
+  .pt-cx-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 2px 6px rgba(28,20,14,.05),0 28px 56px -26px rgba(28,20,14,.3);
+    border-color:rgba(215,70,39,.26);
+  }
+  .pt-cx-card:hover::before,.pt-cx-wa:hover::before{transform:scaleY(1)}
+  .pt-cx-card:hover::after{color:#B3381D;border-top-color:#D74627}
+  .pt-cx-wa:hover::after{color:#B3381D;border-top-color:#D74627}
+}
+/* Staggered reveal, offset per card the way the projects grid offsets its own.
+   This deliberately animates `translate` rather than `transform`: a running
+   animation outranks every normal declaration, so a transform-based reveal
+   holding `transform:none` at its end would permanently defeat both the hover
+   lift below and the inline transform the magnet handler writes on card 04.
+   `translate` is a separate property, so reveal and lift compose instead. */
+@keyframes ptCxRise{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+.pt-cx-cards > *{animation:ptCxRise linear both;animation-timeline:view()}
+.pt-cx-cards > *:nth-child(1){animation-range:entry 2% cover 20%}
+.pt-cx-cards > *:nth-child(2){animation-range:entry 5% cover 23%}
+.pt-cx-cards > *:nth-child(3){animation-range:entry 8% cover 26%}
+.pt-cx-cards > *:nth-child(4){animation-range:entry 11% cover 29%}
+
+/* ---- enquiry form ----------------------------------------------------------
+   Same 24px radius, hairline border and deep shadow as before, over a warm
+   white instead of pure white and the section's own 34px grid, so the fields
+   sit on drafting paper rather than on a blank tile. */
+.pt-cx-form{
+  position:relative;
+  padding:clamp(26px,3vw,40px);border-radius:24px;
+  background-color:#FFFDFA;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(20,18,16,.026) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(90deg,rgba(20,18,16,.026) 0 1px,transparent 1px 34px);
+  border:1px solid rgba(20,18,16,.1);
+  box-shadow:0 1px 2px rgba(28,20,14,.04),0 22px 50px -28px rgba(28,20,14,.26);
+  animation:rise linear both;animation-timeline:view();animation-range:entry 2% cover 26%;
+}
+/* drafting corner marks, opposite corners only */
+.pt-cx-form::before,.pt-cx-form::after{
+  content:'';position:absolute;width:14px;height:14px;pointer-events:none;
+  border-color:rgba(215,70,39,.32);border-style:solid;
+}
+.pt-cx-form::before{top:13px;right:13px;border-width:1px 1px 0 0;border-top-right-radius:5px}
+.pt-cx-form::after{left:13px;bottom:13px;border-width:0 0 1px 1px;border-bottom-left-radius:5px}
+
+/* PROJECT ENQUIRY label: red-to-yellow tick, then a rule out to the card edge —
+   the same num-then-rule head the project cards carry. */
+.pt-cx-formhead{display:flex;align-items:center;gap:13px}
+.pt-cx-formhead::before{
+  content:'';flex:none;width:2px;height:11px;border-radius:1px;
+  background:linear-gradient(180deg,#D74627,#EDAE21);
+}
+.pt-cx-formhead::after{content:'';flex:1;height:1px;background:rgba(20,18,16,.12)}
+
+/* Inputs keep their inline look and their compiled `style-focus` rule. The
+   transition is restated because the inline one lists only border-color and
+   background, so a stylesheet-added box-shadow would otherwise snap. */
+.pt-cx-form input,.pt-cx-form textarea{
+  transition:border-color .35s,background .35s,box-shadow .35s!important;
+}
+.pt-cx-form input:focus,.pt-cx-form textarea:focus{box-shadow:0 0 0 3px rgba(215,70,39,.10)}
+.pt-cx-form label:focus-within > span{color:#B3381D!important}
+
+/* Send button: colour, copy and handlers unchanged; the arrow is the only
+   moving part, and the magnet handler still owns the transform. */
+.pt-cx-arrow{display:inline-block;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+@media (hover:hover){.pt-cx-send:hover .pt-cx-arrow{transform:translateX(4px)}}
+.pt-cx-send:disabled{cursor:default!important}
+.pt-cx-send:disabled .pt-cx-arrow{transform:none}
+.pt-cx-send:focus-visible{outline:2px solid #141414;outline-offset:3px}
+
+/* ---- power flow ------------------------------------------------------------
+   ENQUIRY -> POWERTEK -> RESPONSE, drawn in the hero diagram's language: a
+   1px #D4CCC4 route, white outline nodes, one live red node, and the red and
+   yellow charges running the two spans on the existing `cardSpark` keyframe.
+   Laid out in flex/grid with no fixed widths, so it reflows instead of
+   overflowing and the labels stay under their own nodes at every width. */
+.pt-cx-flow{
+  margin-top:clamp(54px,5.5vw,82px);
+  animation:riseSm linear both;animation-timeline:view();animation-range:entry 6% cover 30%;
+}
+.pt-cx-flow-rail{display:flex;align-items:center;gap:0}
+.pt-cx-flow-dot{
+  flex:none;width:7px;height:7px;border-radius:50%;
+  background:#FFFFFF;border:1px solid #C7BFB7;
+}
+.pt-cx-flow-dot-live{
+  width:9px;height:9px;background:#D74627;border-color:#D74627;
+  box-shadow:0 0 0 4px rgba(215,70,39,.11);
+}
+.pt-cx-flow-seg{
+  position:relative;flex:1 1 0;min-width:20px;height:1px;
+  background:#D4CCC4;overflow:hidden;
+}
+.pt-cx-flow-seg::after{
+  content:'';position:absolute;top:0;left:0;height:100%;width:30%;
+  background:linear-gradient(90deg,transparent,#D74627,transparent);
+  animation:cardSpark 3.6s cubic-bezier(.4,0,.2,1) infinite;
+}
+.pt-cx-flow-seg-y::after{
+  background:linear-gradient(90deg,transparent,#EDAE21,transparent);
+  animation-delay:1.8s;
+}
+.pt-cx-flow-labels{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;
+  font:500 9px/1.5 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#8A8177;
+}
+.pt-cx-flow-labels > span{min-width:0;overflow-wrap:break-word}
+.pt-cx-flow-labels > span:nth-child(2){text-align:center;color:#B3381D}
+.pt-cx-flow-labels > span:nth-child(3){text-align:right}
+
+/* ---- contact section, small screens ---------------------------------------
+   The gutters already tighten via .pt-wrap. These only pull the decoration in
+   so nothing crowds the content or reaches the viewport edge. */
+@media (max-width:600px){
+  .pt-cx-card{padding:24px 22px}
+  .pt-cx-card::after{top:17px;right:18px}
+  .pt-cx-wa::after{top:10px;right:15px}
+  .pt-cx-form::before{top:11px;right:11px}
+  .pt-cx-form::after{left:11px;bottom:11px}
+  .pt-cx-meta{gap:12px;margin-top:20px}
+  .pt-cx-meta-txt{font-size:8.5px;letter-spacing:.18em}
+  .pt-cx-flow-labels{font-size:8px;letter-spacing:.1em;gap:6px}
+}
+@media (max-width:380px){
+  /* At the narrowest supported width the three labels are what runs out of
+     room first, so the rail keeps its nodes and the wording is dropped. */
+  .pt-cx-flow-labels{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .pt-cx-meta,.pt-cx-meta-rule,.pt-cx-form,.pt-cx-flow,.pt-cx-cards > *{
+    animation:none!important;
+  }
+  .pt-cx-flow-seg::after{animation:none!important;opacity:0}
+  .pt-cx-card{transition:box-shadow .01ms!important}
+  .pt-cx-card:hover{transform:none}
+  .pt-cx-card::before,.pt-cx-wa::before,.pt-cx-arrow{transition:none!important}
+}
 </style>
 </helmet>
 
@@ -1389,20 +1626,27 @@ img{max-width:100%}
 </section>
 <section id="contact" style="position:relative;padding:130px 0 0;border-top:1px solid rgba(20,18,16,.08);">
   <div style="position:absolute;top:6%;right:-10%;width:46vw;height:46vw;border-radius:50%;background:radial-gradient(circle,rgba(215,70,39,.075),transparent 68%);filter:blur(30px);pointer-events:none;"></div>
+  <!-- Drafting sheet behind the section. Purely decorative: bounded by inset:0,
+       masked to fade out before the edges, and non-interactive. -->
+  <div class="pt-cx-bg" aria-hidden="true"></div>
   <div class="pt-wrap" style="max-width:1360px;margin:0 auto;padding:0 40px;position:relative;">
     <div style="display:flex;align-items:center;gap:14px;">
       <span style="width:28px;height:1px;background:#D74627;"></span>
       <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">CONTACT</span>
     </div>
     <h2 style="margin:24px 0 0;max-width:22ch;font:900 clamp(34px,4.4vw,62px)/1.03 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Send us the drawings. We will send back a schedule.</h2>
+    <div class="pt-cx-meta">
+      <span class="pt-cx-meta-rule" aria-hidden="true"></span>
+      <span class="pt-cx-meta-txt">01 — START A CONVERSATION</span>
+    </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:clamp(32px,4vw,64px);margin-top:64px;align-items:start;">
-      <div style="display:grid;gap:14px;">
-        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+      <div class="pt-cx-cards" style="display:grid;gap:14px;">
+        <div class="pt-cx-card" data-idx="01">
           <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">EMAIL</div>
           <a href="mailto:powertek.elec@gmail.com" style="display:inline-block;margin-top:12px;font:500 17px/1.4 Inter,sans-serif;color:#1F1E1C;">powertek.elec@gmail.com</a>
         </div>
-        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+        <div class="pt-cx-card" data-idx="02">
           <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">TELEPHONE</div>
           <div style="display:grid;gap:8px;margin-top:14px;">
             <a href="tel:+919845239932" style="font:500 17px/1.3 Inter,sans-serif;color:#1F1E1C;">+91 98452 39932</a>
@@ -1410,11 +1654,11 @@ img{max-width:100%}
             <a href="tel:+919741491691" style="font:500 17px/1.3 Inter,sans-serif;color:#1F1E1C;">+91 97414 91691</a>
           </div>
         </div>
-        <div style="padding:26px 28px;border-radius:20px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 14px 34px -22px rgba(28,20,14,.22);">
+        <div class="pt-cx-card" data-idx="03">
           <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">OFFICE</div>
           <p style="margin:12px 0 0;font:400 16px/1.65 Inter,sans-serif;color:#37332F;">85/2, 5th Cross, Maruthi Nagar,<br />Madiwala, Bengaluru — 560068</p>
         </div>
-        <a href="https://wa.me/919845239932" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-radius:20px;background:#FDF3EF;border:1px solid rgba(215,70,39,.18);transition:background .4s,border-color .4s,transform .25s cubic-bezier(.2,.9,.2,1);" style-hover="background:#FAE7DF;border-color:rgba(215,70,39,.34)">
+        <a class="pt-cx-wa" data-idx="04" href="https://wa.me/919845239932" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-radius:20px;background:#FDF3EF;border:1px solid rgba(215,70,39,.18);transition:background .4s,border-color .4s,transform .25s cubic-bezier(.2,.9,.2,1);" style-hover="background:#FAE7DF;border-color:rgba(215,70,39,.34)">
           <span>
             <span style="display:block;font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#B3381D;">WHATSAPP</span>
             <span style="display:block;margin-top:11px;font:600 17px/1.3 Inter,sans-serif;color:#141414;">Message us directly</span>
@@ -1423,8 +1667,8 @@ img{max-width:100%}
         </a>
       </div>
 
-      <form onSubmit="{{ submit }}" style="padding:clamp(26px,3vw,40px);border-radius:24px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 22px 50px -28px rgba(28,20,14,.26);">
-        <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">PROJECT ENQUIRY</div>
+      <form class="pt-cx-form" onSubmit="{{ submit }}">
+        <div class="pt-cx-formhead" style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">PROJECT ENQUIRY</div>
         <!-- Honeypot. Positioned off-screen and out of the tab order, so no
              human ever sees or fills it; automated spam that fills every input
              is discarded server-side. Absolutely positioned, therefore out of
@@ -1448,8 +1692,8 @@ img{max-width:100%}
             <textarea name="message" rows="4" placeholder="Location, sanctioned load, transformer capacity, expected timeline" style="width:100%;padding:15px 17px;border-radius:12px;background:#FFFFFF;border:1px solid rgba(20,18,16,.14);color:#1C1B19;font:400 15px/1.55 Inter,sans-serif;outline:none;resize:vertical;transition:border-color .35s,background .35s;" style-focus="border-color:rgba(215,70,39,.5);background:#FFFBF6"></textarea>
           </label>
         </div>
-        <button type="submit" disabled="{{ busy }}" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;width:100%;margin-top:26px;padding:19px 26px;border:none;border-radius:100px;cursor:pointer;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;display:flex;align-items:center;justify-content:center;gap:12px;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
-          <sc-if value="{{ idle }}" hint-placeholder-val="{{ true }}">Send Enquiry</sc-if>
+        <button type="submit" class="pt-cx-send" disabled="{{ busy }}" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="position:relative;overflow:hidden;width:100%;margin-top:26px;padding:19px 26px;border:none;border-radius:100px;cursor:pointer;font:600 14px/1 Inter,sans-serif;color:#FFFFFF;background:#D74627;box-shadow:0 16px 36px -18px rgba(215,70,39,.5);transition:background .35s,color .35s,transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .4s;display:flex;align-items:center;justify-content:center;gap:12px;" style-hover="background:#EDAE21;color:#141414;box-shadow:0 20px 46px -16px rgba(237,174,33,.6)">
+          <sc-if value="{{ idle }}" hint-placeholder-val="{{ true }}">Send Enquiry<span class="pt-cx-arrow" aria-hidden="true">→</span></sc-if>
           <sc-if value="{{ sending }}">
             <span style="width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:currentColor;animation:spin .7s linear infinite;"></span>
             Sending
@@ -1466,6 +1710,23 @@ img{max-width:100%}
         <p role="alert" style="margin:18px 0 0;font:400 13px/1.6 Inter,sans-serif;color:#B3381D;animation:riseSm .5s cubic-bezier(.2,.9,.2,1) both;">{{ error }}</p>
         </sc-if>
       </form>
+    </div>
+
+    <!-- Power flow. Decorative only — the hero diagram's route language reduced
+         to three nodes, saying "your enquiry -> Powertek -> response" without
+         spelling it out. No fixed widths anywhere, so it reflows rather than
+         overflowing. -->
+    <div class="pt-cx-flow" aria-hidden="true">
+      <div class="pt-cx-flow-rail">
+        <span class="pt-cx-flow-dot"></span>
+        <span class="pt-cx-flow-seg"></span>
+        <span class="pt-cx-flow-dot pt-cx-flow-dot-live"></span>
+        <span class="pt-cx-flow-seg pt-cx-flow-seg-y"></span>
+        <span class="pt-cx-flow-dot"></span>
+      </div>
+      <div class="pt-cx-flow-labels">
+        <span>ENQUIRY</span><span>POWERTEK</span><span>RESPONSE</span>
+      </div>
     </div>
   </div>
 
@@ -1665,25 +1926,25 @@ img{max-width:100%}
    and both fall back to the engineered placeholder — no broken image icons.
 --------------------------------------------------------------------------- */
 const PROJECT_DATA = [
-  {
-    name: 'Confident Meadows',
-    type: 'Residential Apartment Project',
-    scale: '140 Premium Apartments',
-    completed: 'April 2025',
-    description: 'Powertek executed the complete external electrification works for a 140-unit residential apartment project comprising three G+11 residential towers. The scope included the supply, installation, testing and commissioning of the entire HT and LT electrical infrastructure, ensuring a reliable and compliant power distribution system.',
+{
+    name: 'Confident Oxygen',
+    type: 'Residential & Commercial Mixed Development',
+    scale: '250 Apartments + 72 Commercial Shops',
+    completed: 'March 2023',
+    description: 'Powertek delivered complete external electrification for a mixed-use residential and commercial development, providing HT/LT distribution systems, transformer installations and backup power infrastructure.',
     scope: [
-      'Supply & Installation of 11 kV 5-Way RMU',
-      'Installation of 3 × 250 kVA Distribution Transformers',
-      '400A LT Kiosk Panels, Metering Panels & Distribution Panels',
-      'HT & LT Underground Cable Laying (Trench & Cable Tray)',
-      'HT Cable Pothead & End Termination Works',
-      'Installation of 320 kVA Diesel Generator with Stack',
-      'Advanced Lightning Protection System with Lightning Counter'
+      '11 kV 5-Way RMU',
+      '2 × 500 kVA + 1 × 250 kVA Transformers',
+      '800A LT Kiosk & Metering Panels',
+      'Distribution & Common Area Panels',
+      'HT & LT Cable Laying',
+      'Synchronizing, AMF & AC Panels',
+      'DG Installation & Stack Works'
     ],
     images: [
   {
-    src: 'uploads/con-med2.jpg',
-    alt: 'Confident Meadows residential apartment electrical infrastructure project'
+    src: 'uploads/confident-oxygen.png',
+    alt: 'Confident Oxygen residential and commercial electrical infrastructure project'
   }
 ]
   },
@@ -1709,24 +1970,24 @@ const PROJECT_DATA = [
     ]
   },
   {
-    name: 'Confident Oxygen',
-    type: 'Residential & Commercial Mixed Development',
-    scale: '250 Apartments + 72 Commercial Shops',
-    completed: 'March 2023',
-    description: 'Powertek delivered complete external electrification for a mixed-use residential and commercial development, providing HT/LT distribution systems, transformer installations and backup power infrastructure.',
+    name: 'Confident Meadows',
+    type: 'Residential Apartment Project',
+    scale: '140 Premium Apartments',
+    completed: 'April 2025',
+    description: 'Powertek executed the complete external electrification works for a 140-unit residential apartment project comprising three G+11 residential towers. The scope included the supply, installation, testing and commissioning of the entire HT and LT electrical infrastructure, ensuring a reliable and compliant power distribution system.',
     scope: [
-      '11 kV 5-Way RMU',
-      '2 × 500 kVA + 1 × 250 kVA Transformers',
-      '800A LT Kiosk & Metering Panels',
-      'Distribution & Common Area Panels',
-      'HT & LT Cable Laying',
-      'Synchronizing, AMF & AC Panels',
-      'DG Installation & Stack Works'
+      'Supply & Installation of 11 kV 5-Way RMU',
+      'Installation of 3 × 250 kVA Distribution Transformers',
+      '400A LT Kiosk Panels, Metering Panels & Distribution Panels',
+      'HT & LT Underground Cable Laying (Trench & Cable Tray)',
+      'HT Cable Pothead & End Termination Works',
+      'Installation of 320 kVA Diesel Generator with Stack',
+      'Advanced Lightning Protection System with Lightning Counter'
     ],
     images: [
   {
-    src: 'uploads/confident-oxygen.png',
-    alt: 'Confident Oxygen residential and commercial electrical infrastructure project'
+    src: 'uploads/con-med2.jpg',
+    alt: 'Confident Meadows residential apartment electrical infrastructure project'
   }
 ]
   },
