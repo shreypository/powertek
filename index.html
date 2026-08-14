@@ -3,6 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Browser-tab identity. Every icon here is derived from assets/powertek-mark.png,
+     the same mark the navbar lockup and the hero energy wheel already use, so the
+     tab, the header and a phone home screen all carry one asset. Paths are
+     root-relative: the site is served from the domain root on Vercel, so these
+     resolve the same at https://www.powertekservices.in/ and from any nested
+     route. Declared in the static head rather than in <helmet> so the tab icon is
+     requested during the initial parse, before support.js boots. -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <script src="./support.js"></script>
 </head>
 <body>
