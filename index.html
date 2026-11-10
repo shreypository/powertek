@@ -15,14 +15,80 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<!-- SEO. Static on purpose: title, description, canonical, social cards and
+     structured data must be in the initial HTML, not injected by support.js,
+     so every crawler (including ones that do not run JavaScript) sees them.
+     The <helmet> block below no longer repeats title/description, which would
+     otherwise be appended to <head> a second time at runtime. -->
+<title>Powertek | Class I Electrical Contractors in Bengaluru</title>
+<meta name="description" content="Powertek is a Class I Licensed Electrical Contractor in Bengaluru, established 1995. HT &amp; LT electrical infrastructure, apartment and layout electrification, hospital and commercial projects, BESCOM liaison, testing and commissioning.">
+<link rel="canonical" href="https://www.powertekservices.in/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#D74627">
+<meta name="geo.region" content="IN-KA">
+<meta name="geo.placename" content="Bengaluru">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Powertek">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://www.powertekservices.in/">
+<meta property="og:title" content="Powertek | Class I Electrical Contractors in Bengaluru">
+<meta property="og:description" content="HT &amp; LT electrical infrastructure, layout electrification, BESCOM liaison, testing and commissioning. Class I licensed, serving Bengaluru since 1995.">
+<meta property="og:image" content="https://www.powertekservices.in/assets/powertek-mark.png">
+<meta property="og:image:alt" content="Powertek logo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Powertek | Class I Electrical Contractors in Bengaluru">
+<meta name="twitter:description" content="HT &amp; LT electrical infrastructure, layout electrification, BESCOM liaison, testing and commissioning. Since 1995.">
+<meta name="twitter:image" content="https://www.powertekservices.in/assets/powertek-mark.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.powertekservices.in/#website",
+      "url": "https://www.powertekservices.in/",
+      "name": "Powertek",
+      "inLanguage": "en-IN",
+      "publisher": { "@id": "https://www.powertekservices.in/#business" }
+    },
+    {
+      "@type": ["Electrician", "LocalBusiness"],
+      "@id": "https://www.powertekservices.in/#business",
+      "name": "Powertek",
+      "alternateName": "Powertek Class I Electrical Contractors, Consultants & Engineers",
+      "description": "Class I Licensed Electrical Contractor in Bengaluru delivering HT & LT electrical infrastructure, apartment and layout electrification, hospital and commercial projects, BESCOM liaison, testing and commissioning.",
+      "url": "https://www.powertekservices.in/",
+      "logo": "https://www.powertekservices.in/assets/powertek-mark.png",
+      "image": "https://www.powertekservices.in/assets/powertek-mark.png",
+      "telephone": "+91-98452-39932",
+      "email": "powertek.elec@gmail.com",
+      "foundingDate": "1995",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "85/2, 5th Cross, Maruthi Nagar, Madiwala",
+        "addressLocality": "Bengaluru",
+        "postalCode": "560068",
+        "addressRegion": "Karnataka",
+        "addressCountry": "IN"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Bengaluru" },
+        { "@type": "AdministrativeArea", "name": "Karnataka" }
+      ],
+      "knowsAbout": [
+        "HT electrical works", "LT electrical works", "11 kV RMU installation",
+        "Transformer installation", "Layout electrification", "BESCOM liaison",
+        "Electrical testing and commissioning", "DG and AMF panels"
+      ]
+    }
+  ]
+}
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Powertek — Class I Electrical Contractors, Consultants &amp; Engineers</title>
-<meta name="description" content="Powertek is a Class I Licensed Electrical Contractor in Bengaluru, established 1995. HT &amp; LT electrical infrastructure, apartment and layout electrification, hospital and commercial projects, BESCOM liaison, testing and commissioning." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet" />
@@ -1244,7 +1310,7 @@ img{max-width:100%}
           <span style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:#B3381D;">ABOUT POWERTEK</span>
         </div>
         <h2 style="margin:26px 0 0;font:900 clamp(34px,4vw,60px)/1.04 Satoshi,Inter,sans-serif;letter-spacing:-.038em;color:#141414;text-wrap:balance;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Three decades of external electrical infrastructure.</h2>
-        <p style="margin:30px 0 0;max-width:52ch;font:400 16px/1.75 Inter,sans-serif;color:#5C554E;text-wrap:pretty;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 36%;">Powertek is a Class I Licensed Electrical Contractor based in Bangalore, established in 1995. We execute complete external electrical infrastructure — from 11 kV incoming and RMU installation through transformers, LT panels, underground cabling and DG sets, to final testing and commissioning.</p>
+        <p style="margin:30px 0 0;max-width:52ch;font:400 16px/1.75 Inter,sans-serif;color:#5C554E;text-wrap:pretty;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 36%;">Powertek is a Class I Licensed Electrical Contractor based in Bangalore, established in 1995. We execute complete external electrical infrastructure, from 11 kV incoming and RMU installation through transformers, LT panels, underground cabling and DG sets, to final testing and commissioning.</p>
         <p style="margin:20px 0 0;max-width:52ch;font:400 16px/1.75 Inter,sans-serif;color:#5C554E;text-wrap:pretty;animation:riseSm linear both;animation-timeline:view();animation-range:entry 4% cover 40%;">Our teams handle labour, liaison and BESCOM coordination in-house, which means a single accountable contractor from drawing approval to energisation.</p>
 
         <div style="display:grid;gap:14px;margin-top:46px;">
@@ -1347,7 +1413,7 @@ img{max-width:100%}
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">03</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Complete HT &amp; LT Infrastructure</div>
-          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">RMU to final distribution board under one contract — no coordination gaps between vendors.</p>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#605952;">RMU to final distribution board under one contract, with no coordination gaps between vendors.</p>
         </div>
       </div>
       <div class="pt-why-card" onMouseMove="{{ onTilt }}" onMouseLeave="{{ onTiltLeave }}" style="position:relative;overflow:hidden;padding:34px 30px 30px;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;border-radius:22px;background:#FFFFFF;border:1px solid rgba(20,18,16,.1);box-shadow:0 1px 2px rgba(28,20,14,.04),0 16px 38px -24px rgba(28,20,14,.24);transform-style:preserve-3d;transition:box-shadow .5s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1);animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 36%;">
@@ -1382,7 +1448,7 @@ img{max-width:100%}
         <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.22em;color:#B3381D;">08</div>
         <div>
           <div style="font:700 24px/1.15 Satoshi,Inter,sans-serif;letter-spacing:-.02em;color:#141414;">Timely Delivery</div>
-          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#3E3A36;">Handover dates held against developer schedules — the reason clients return project after project.</p>
+          <p style="margin:12px 0 0;font:400 14px/1.65 Inter,sans-serif;color:#3E3A36;">Handover dates held against developer schedules, which is the reason clients return project after project.</p>
         </div>
       </div>
     </div>
@@ -1480,7 +1546,7 @@ img{max-width:100%}
         </div>
         <sc-if value="{{ s3 }}">
         <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
-          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Full electrification for apartment developments — external substation works, DG backup and synchronising panels, common-area distribution, and individual flat metering coordinated with BESCOM.</p>
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Full electrification for apartment developments: external substation works, DG backup and synchronising panels, common-area distribution, and individual flat metering coordinated with BESCOM.</p>
         </div>
         </sc-if>
       </div>
@@ -1512,7 +1578,7 @@ img{max-width:100%}
         </div>
         <sc-if value="{{ s5 }}">
         <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
-          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Shopping complexes, offices and data centres — higher fault levels, VCB panels, common-area and tenant metering, and DG capacity sized for continuous commercial load.</p>
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Shopping complexes, offices and data centres with higher fault levels, VCB panels, common-area and tenant metering, and DG capacity sized for continuous commercial load.</p>
         </div>
         </sc-if>
       </div>
@@ -1544,7 +1610,7 @@ img{max-width:100%}
         </div>
         <sc-if value="{{ s7 }}">
         <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
-          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Pre-energisation testing and documentation — HT cable pressure and IR tests, transformer oil and ratio tests, relay settings, earth resistance readings, and inspection sign-off records.</p>
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Pre-energisation testing and documentation: HT cable pressure and IR tests, transformer oil and ratio tests, relay settings, earth resistance readings, and inspection sign-off records.</p>
         </div>
         </sc-if>
       </div>
@@ -1560,7 +1626,7 @@ img{max-width:100%}
         </div>
         <sc-if value="{{ s8 }}">
         <div style="padding:0 6px 44px;animation:riseSm .55s cubic-bezier(.2,.9,.2,1) both;">
-          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Drawing approvals, sanctioned-load applications, inspectorate clearance and BESCOM coordination through to meter installation — handled by our own liaison team, not sub-contracted.</p>
+          <p style="margin:0;font:400 15px/1.75 Inter,sans-serif;color:#5C554E;max-width:64ch;">Drawing approvals, sanctioned-load applications, inspectorate clearance and BESCOM coordination through to meter installation, handled by our own liaison team, not sub-contracted.</p>
         </div>
         </sc-if>
       </div>
@@ -1580,7 +1646,7 @@ img{max-width:100%}
         </div>
         <h2 style="margin:24px 0 0;max-width:18ch;font:900 clamp(34px,4.4vw,66px)/1.02 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 30%;">Recent completed projects</h2>
         <div class="pt-daterange" style="display:flex;align-items:center;gap:14px;margin-top:26px;animation:slideInX linear both;animation-timeline:view();animation-range:entry 6% cover 34%;">
-          <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.32em;color:#5F584F;">2023 — 2026</span>
+          <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.32em;color:#5F584F;">2023 to 2026</span>
           <span style="flex:none;width:56px;height:1px;background:linear-gradient(90deg,#D74627,#EDAE21);"></span>
         </div>
       </div>
@@ -1654,7 +1720,7 @@ img{max-width:100%}
     <h2 style="margin:24px 0 0;max-width:22ch;font:900 clamp(34px,4.4vw,62px)/1.03 Satoshi,Inter,sans-serif;letter-spacing:-.04em;color:#141414;animation:rise linear both;animation-timeline:view();animation-range:entry 4% cover 32%;">Send us the drawings. We will send back a schedule.</h2>
     <div class="pt-cx-meta">
       <span class="pt-cx-meta-rule" aria-hidden="true"></span>
-      <span class="pt-cx-meta-txt">01 — START A CONVERSATION</span>
+      <span class="pt-cx-meta-txt">01 · START A CONVERSATION</span>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr));gap:clamp(32px,4vw,64px);margin-top:64px;align-items:start;">
@@ -1673,7 +1739,7 @@ img{max-width:100%}
         </div>
         <div class="pt-cx-card" data-idx="03">
           <div style="font:500 10px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:#5F584F;">OFFICE</div>
-          <p style="margin:12px 0 0;font:400 16px/1.65 Inter,sans-serif;color:#37332F;">85/2, 5th Cross, Maruthi Nagar,<br />Madiwala, Bengaluru — 560068</p>
+          <p style="margin:12px 0 0;font:400 16px/1.65 Inter,sans-serif;color:#37332F;">85/2, 5th Cross, Maruthi Nagar,<br />Madiwala, Bengaluru 560068</p>
         </div>
         <a class="pt-cx-wa" data-idx="04" href="https://wa.me/919845239932" onMouseMove="{{ onMagnet }}" onMouseLeave="{{ onMagnetLeave }}" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;border-radius:20px;background:#FDF3EF;border:1px solid rgba(215,70,39,.18);transition:background .4s,border-color .4s,transform .25s cubic-bezier(.2,.9,.2,1);" style-hover="background:#FAE7DF;border-color:rgba(215,70,39,.34)">
           <span>
@@ -2321,7 +2387,7 @@ class Component extends DCLogic {
       scale: p.scale,
       completed: p.completed,
       description: p.description,
-      aria: p.name + ' — ' + p.type,
+      aria: p.name + ', ' + p.type,
       images: p.images,
       noImages: !p.images.length,
       scope: p.scope.map((text, k) => ({ n: pad2(k + 1), text: text, delay: 90 + k * 55 })),
